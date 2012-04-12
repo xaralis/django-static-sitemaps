@@ -36,6 +36,12 @@ Include ``static_sitemaps.urls`` to your ``urls.py`` to serve the root ``sitemap
 		url(r'^sitemap.xml', include('static_sitemaps.urls')),
 	)
 
+Setup your cron to run::
+
+	django-admin.py refresh_sitemap
+
+periodically. Usually, it's enough to set it to run once by 30 minutes or so.
+
 Done.
 
 Advanced settings
