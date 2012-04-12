@@ -18,7 +18,7 @@ Install via standard Python way::
 
 	pip install django-static-sitemaps
 
-Add to you ``INSTALLED_APPS``:
+Add to you ``INSTALLED_APPS``::
 
 	INSTALLED_APPS = (
 		...
