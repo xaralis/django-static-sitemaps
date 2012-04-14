@@ -5,7 +5,7 @@ There are times when your site is too big to serve the ``sitemap.xml`` by your D
 
 Feature highlights:
 
-* Generate sitemap files to your STATIC directory
+* Generate sitemap files to your STATIC/MEDIA/(own choice) directory
 * Split sitemap files when limit for size is reached 
 * Gzip the sitemap files when required
 * Set different domain for sitemap file
@@ -30,7 +30,7 @@ Set ``STATICSITEMAPS_ROOT_SITEMAP`` variable in your ``settings.py`` to point to
 
 	STATICSITEMAPS_ROOT_SITEMAP = 'myproject.sitemaps.sitemaps'
 
-Include ``static_sitemaps.urls`` to your ``urls.py`` to serve the root ``sitemap.xml`` if needed::
+Include ``static_sitemaps.urls`` to your ``urls.py`` to serve the root ``sitemap.xml`` if you want to serve index file through Django (might be usefull sometimes when it's hard for you to serve it by webserver itself)::
 	
 	urlpatterns = patterns('',
 		url(r'^sitemap.xml', include('static_sitemaps.urls')),
@@ -47,6 +47,9 @@ Done.
 Advanced settings
 ------------------
 
+``STATICSITEMAPS_ROOT_DIR``
+    Filesystem path to generate the sitemaps files to. Defaults to ``STATIC_ROOT`` directory.
+
 ``STATICSITEMAPS_USE_GZIP``
 	Defaults to ``True``. If ``True``, gzip compression will be used when generating the sitemaps files (which is very possible by sitemaps specification).
 
@@ -56,3 +59,8 @@ Advanced settings
 ``STATICSITEMAPS_SITEMAP_DOMAIN``
 	Set this to the domain from which you serve static files in case it it different from domain of your Django application. Defaults to current site's domain.
 
+``STATICSITEMAPS_LANGUAGE``
+    Language code to use when generating the sitemaps. Defaults to ``LANGUAGE_CODE`` setting.
+    
+``STATICSITEMAPS_PING_GOOGLE``
+    Boolean determining whether to ping google after sitemaps have been updated. Defaults to ``True``.
