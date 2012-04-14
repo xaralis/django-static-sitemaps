@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 import static_sitemaps
 
 setup(
@@ -11,11 +11,9 @@ setup(
     author='Filip Varecha',
     author_email='xaralis@centrum.cz',
     license='BSD',
+    url='http://github.com/xaralis/django-static-sitemaps',
 
-    packages=find_packages(
-        where='.',
-        exclude=('doc', 'debian',)
-    ),
+    packages=('static_sitemaps',),
 
     include_package_data=True,
 
@@ -23,12 +21,12 @@ setup(
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: BSD License",
-        "Operating System :: OS Independent",
         "Framework :: Django",
         "Programming Language :: Python :: 2.5",
         "Programming Language :: Python :: 2.6",
         "Programming Language :: Python :: 2.7",
-        "Operating System :: OS Independent",
+        "Operating System :: POSIX",
+        "Operating System :: POSIX :: Linux",
         "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
