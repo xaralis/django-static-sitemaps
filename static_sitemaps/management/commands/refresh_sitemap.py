@@ -6,6 +6,7 @@ Created on 21.10.2011
 import os
 import subprocess
 
+from django.conf import settings
 from django.contrib.sites.models import Site
 from django.contrib.sitemaps import ping_google
 from django.core.exceptions import ImproperlyConfigured
@@ -57,9 +58,9 @@ class Command(NoArgsCommand):
                     filename += '.gz'
 
                 if domain[-1] == '/':
-                    sites.append('%s%s' % (domain, filename))
+                    sites.append('http://%s%s%s' % (domain, settings.STATIC_URL[1:], filename))
                 else:
-                    sites.append('%s/%s' % (domain, filename))
+                    sites.append('http://%s%s%s' % (domain, settings.STATIC_URL, filename))
         f = open(os.path.join(conf.ROOT_DIR, 'sitemap.xml'), 'w')
         f.write(smart_str(loader.render_to_string('sitemap_index.xml',
                                                   {'sitemaps': sites})))
