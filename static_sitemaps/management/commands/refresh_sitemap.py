@@ -36,7 +36,8 @@ class Command(NoArgsCommand):
             raise ImproperlyConfigured('Module "%s" does not define a "%s" '
                                        'class.' % (module, attr))
 
-        domain = conf.DOMAIN or Site.objects.get_current().domain
+        domain = self.normalize_domain(conf.DOMAIN or
+                                       Site.objects.get_current().domain)
         sites = []
 
         if not isinstance(sitemaps, dict):
@@ -56,10 +57,7 @@ class Command(NoArgsCommand):
                 if conf.USE_GZIP:
                     filename += '.gz'
 
-                if domain[-1] == '/':
-                    sites.append('%s%s' % (domain, filename))
-                else:
-                    sites.append('%s/%s' % (domain, filename))
+                sites.append('%s%s' % (domain, filename))
         f = open(os.path.join(conf.ROOT_DIR, 'sitemap.xml'), 'w')
         f.write(smart_str(loader.render_to_string('sitemap_index.xml',
                                                   {'sitemaps': sites})))
@@ -67,6 +65,13 @@ class Command(NoArgsCommand):
 
         if conf.PING_GOOGLE:
             ping_google(reverse('static_sitemaps_index'))
+
+    def normalize_domain(self, domain):
+        if domain[-1] != '/':
+            domain = domain + '/'
+        if not domain.startswith(('http://', 'https://')):
+            domain = 'http://' + domain
+        return domain
 
     def write_page(self, site, page, filename):
         urls = []
@@ -98,4 +103,3 @@ class Command(NoArgsCommand):
         translation.activate(conf.LANGUAGE)
         self.write_index()
         translation.deactivate()
-
