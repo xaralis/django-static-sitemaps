@@ -33,11 +33,14 @@ Add to you ``INSTALLED_APPS``::
 		...
 	)
 
-Set ``STATICSITEMAPS_ROOT_SITEMAP`` variable in your ``settings.py`` to point to dictionary holding the sitemaps configuration (as seen in Django docs)::
+Set ``STATICSITEMAPS_ROOT_SITEMAP`` variable in your ``settings.py`` to point
+to dictionary holding the sitemaps configuration (as seen in Django docs)::
 
 	STATICSITEMAPS_ROOT_SITEMAP = 'myproject.sitemaps.sitemaps'
 
-Include ``static_sitemaps.urls`` to your ``urls.py`` to serve the root ``sitemap.xml`` if you want to serve index file through Django (might be usefull sometimes when it's hard for you to serve it by webserver itself)::
+Include ``static_sitemaps.urls`` to your ``urls.py`` to serve the root
+``sitemap.xml`` if you want to serve index file through Django (might be
+usefull sometimes when it's hard for you to serve it by webserver itself)::
 
 	urlpatterns = patterns('',
 		url(r'^sitemap.xml', include('static_sitemaps.urls')),
@@ -51,6 +54,13 @@ periodically. Usually, it's enough to set it to run once by 30 minutes or so.
 
 Done.
 
+**Note:** Your sitemap files will be served from ``STATIC_URL`` by default. If your
+``STATIC_URL`` is a relative one (e.g. ``/static/``), the result will be
+prepended the domain to respect the current ``Site`` object. If your
+``STATIC_URL`` is absolute (generally doesn't start with a '/'), sitemaps
+URL will respect it completely. If you need more detailed control, see
+``STATICSITEMAPS_DOMAIN`` setting.
+
 Advanced settings
 ------------------
 
@@ -63,7 +73,7 @@ Advanced settings
 ``STATICSITEMAPS_FILENAME_TEMPLATE``
 	Template for sitemap parts. Defaults to ``sitemap-%(section)s-%(page)s.xml``.
 
-``STATICSITEMAPS_SITEMAP_DOMAIN``
+``STATICSITEMAPS_DOMAIN``
 	Set this to the domain from which you serve static files in case it it different from domain of your Django application. Defaults to current site's domain.
 
 ``STATICSITEMAPS_LANGUAGE``

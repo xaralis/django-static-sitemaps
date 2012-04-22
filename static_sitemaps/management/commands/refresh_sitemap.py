@@ -6,7 +6,6 @@ Created on 21.10.2011
 import os
 import subprocess
 
-from django.contrib.sites.models import Site
 from django.contrib.sitemaps import ping_google
 from django.core.exceptions import ImproperlyConfigured
 from django.core.paginator import EmptyPage, PageNotAnInteger
@@ -36,8 +35,7 @@ class Command(NoArgsCommand):
             raise ImproperlyConfigured('Module "%s" does not define a "%s" '
                                        'class.' % (module, attr))
 
-        domain = self.normalize_domain(conf.DOMAIN or
-                                       Site.objects.get_current().domain)
+        domain = self.normalize_domain(conf.DOMAIN)
         sites = []
 
         if not isinstance(sitemaps, dict):
