@@ -21,6 +21,7 @@ from static_sitemaps import conf
 
 class Command(NoArgsCommand):
     command = None
+    help = 'Generates sitemaps files to a predefined directory.'
 
     def write_index(self):
         module, attr = conf.ROOT_SITEMAP.rsplit('.', 1)
