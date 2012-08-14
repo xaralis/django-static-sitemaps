@@ -89,8 +89,10 @@ class Command(NoArgsCommand):
         if os.path.exists(path):
             os.unlink(path)
 
+        template = getattr(site, 'sitemap_template', 'sitemap.xml')
+
         f = open(path, 'w')
-        f.write(smart_str(loader.render_to_string('sitemap.xml',
+        f.write(smart_str(loader.render_to_string(template,
                                                   {'urlset': urls})))
         f.close()
 
