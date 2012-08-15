@@ -47,16 +47,20 @@ class Command(NoArgsCommand):
                 pages = site().paginator.num_pages
             else:
                 pages = site.paginator.num_pages
-
+            
             for page in range(1, pages + 1):
+                site_index = {}
                 filename = conf.FILENAME_TEMPLATE % {'section': section,
                                                      'page': page}
-                self.write_page(site, page, filename)
+                lastmod = self.write_page(site, page, filename)
 
                 if conf.USE_GZIP:
                     filename += '.gz'
+                
+                site_index['location'] = '%s%s' % (domain, filename)     
+                site_index['lastmod'] = lastmod
+                sites.append(site_index)
 
-                sites.append('%s%s' % (domain, filename))
         f = open(os.path.join(conf.ROOT_DIR, 'sitemap.xml'), 'w')
         f.write(smart_str(loader.render_to_string(conf.INDEX_TEMPLATE,
                                                   {'sitemaps': sites})))
@@ -84,13 +88,18 @@ class Command(NoArgsCommand):
         except PageNotAnInteger:
             print "No page '%s'" % page
 
+        if urls:
+            file_lastmod = urls[0].get('lastmod')
+        else:
+            file_lastmod = None
+
         path = os.path.join(conf.ROOT_DIR, filename)
 
         if os.path.exists(path):
             os.unlink(path)
 
         template = getattr(site, 'sitemap_template', 'sitemap.xml')
-
+        
         f = open(path, 'w')
         f.write(smart_str(loader.render_to_string(template,
                                                   {'urlset': urls})))
@@ -99,6 +108,7 @@ class Command(NoArgsCommand):
         if conf.USE_GZIP:
             subprocess.call(['gzip', '-f', os.path.join(conf.ROOT_DIR,
                                                         filename)])
+        return file_lastmod
 
     def handle_noargs(self, **options):
         translation.activate(conf.LANGUAGE)
