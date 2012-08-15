@@ -58,7 +58,7 @@ class Command(NoArgsCommand):
 
                 sites.append('%s%s' % (domain, filename))
         f = open(os.path.join(conf.ROOT_DIR, 'sitemap.xml'), 'w')
-        f.write(smart_str(loader.render_to_string('sitemap_index.xml',
+        f.write(smart_str(loader.render_to_string(conf.INDEX_TEMPLATE,
                                                   {'sitemaps': sites})))
         f.close()
 
