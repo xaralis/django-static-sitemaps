@@ -5,7 +5,7 @@
   <sitemap>
     <loc>{{ site.location }}</loc>
     {% if site.lastmod %}
-      <lastmod>{{ site.lastmod|date:"Y-m-d\TH:i:sO" }}</lastmod>
+      <lastmod>{{ site.lastmod|date:"Y-m-d\TH:i:sO"|slice:":-2" }}00</lastmod>
     {% endif %}
   </sitemap>
 {% endfor %}
