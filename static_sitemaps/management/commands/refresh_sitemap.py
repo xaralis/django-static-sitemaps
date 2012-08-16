@@ -15,6 +15,7 @@ from django.template import loader
 from django.utils import translation
 from django.utils.encoding import smart_str
 from django.utils.importlib import import_module
+from django.core.urlresolvers import NoReverseMatch
 
 from static_sitemaps import conf
 
@@ -67,7 +68,13 @@ class Command(NoArgsCommand):
         f.close()
 
         if conf.PING_GOOGLE:
-            ping_google(reverse('static_sitemaps_index'))
+            try:
+                sitemap_url = reverse('static_sitemaps_index')
+            except NoReverseMatch:
+                domain = self.normalize_domain(conf.DOMAIN)
+                sitemap_url = "%ssitemap.xml" % domain
+
+            ping_google(sitemap_url)
 
     def normalize_domain(self, domain):
         if domain[-1] != '/':
