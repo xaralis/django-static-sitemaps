@@ -61,6 +61,15 @@ prepended the domain to respect the current ``Site`` object. If your
 URL will respect it completely. If you need more detailed control, see
 ``STATICSITEMAPS_DOMAIN`` setting.
 
+**Note about sitemap index lastmod:** In the static_sitemaps app the sitemaps 
+index works slightly different than the Django's default behaviour. Just like 
+Django it also gathers all urls from the generated sitemaps but it also 
+includes a new XML tag ``lastmod``. The date/time set in this tag comes 
+from the first element of the generated file, so reverse sorting your query 
+by your date field will keep this information accurate. This is important to
+inform the crawler how fresh is the information inside each sitemap inside the
+sitemap_index.xml. 
+
 Advanced settings
 ------------------
 
@@ -89,7 +98,9 @@ Advanced settings
 Using a custom template
 -----------------------
 
-If you need to use a template different from the Django's default (for example to generate a Google News sitemap) you can extend the you Sitemap class and setting a ``sitemap_template`` attribute. For Example:
+If you need to use a template different from the Django's default (for example 
+to generate a Google News sitemap) you can extend the you Sitemap class and 
+setting a ``sitemap_template`` attribute. For Example:
 
 .. sourcecode::
 
@@ -97,4 +108,5 @@ If you need to use a template different from the Django's default (for example t
                                                                                  
     class GoogleNewsSitemap(GenericSitemap):                                         
         sitemap_template = 'sitemap_googlenews.xml'
+
 
