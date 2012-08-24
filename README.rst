@@ -73,6 +73,9 @@ Advanced settings
 ``STATICSITEMAPS_FILENAME_TEMPLATE``
 	Template for sitemap parts. Defaults to ``sitemap-%(section)s-%(page)s.xml``.
 
+``STATICSITEMAPS_INDEX_TEMPLATE``
+    Template path for sitemap index. Defaults to ``static_sitemaps/sitemap_index.xml``. 
+
 ``STATICSITEMAPS_DOMAIN``
 	Set this to the domain from which you serve static files in case it it different from domain of your Django application. Defaults to current site's domain.
 
