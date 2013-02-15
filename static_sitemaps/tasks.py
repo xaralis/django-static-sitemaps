@@ -11,7 +11,7 @@ __author__ = 'xaralis'
 
 
 class GenerateSitemap(PeriodicTask):
-    run_every = timedelta(minutes=2)
+    run_every = timedelta(minutes=conf.CELERY_TASK_REPETITION)
 
     def run(self, **kwargs):
         translation.activate(conf.LANGUAGE)
