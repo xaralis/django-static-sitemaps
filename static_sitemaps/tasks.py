@@ -1,4 +1,7 @@
-from django.core.management.base import NoArgsCommand
+from datetime import timedelta
+
+from celery.task import PeriodicTask
+
 from django.utils import translation
 
 from static_sitemaps import conf
@@ -7,12 +10,12 @@ from static_sitemaps.generator import SitemapGenerator
 __author__ = 'xaralis'
 
 
-class Command(NoArgsCommand):
-    command = None
-    help = 'Generates sitemaps files to a predefined directory.'
+class GenerateSitemap(PeriodicTask):
+    run_every = timedelta(minutes=2)
 
-    def handle_noargs(self, **options):
+    def run(self, **kwargs):
         translation.activate(conf.LANGUAGE)
         generator = SitemapGenerator()
         generator.write_index()
         translation.deactivate()
+

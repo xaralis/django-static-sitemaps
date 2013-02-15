@@ -14,7 +14,7 @@ FILENAME_TEMPLATE = getattr(settings,
 DOMAIN = getattr(settings, 'STATICSITEMAPS_DOMAIN', None)
 LANGUAGE = getattr(settings, 'STATICSITEMAPS_LANGUAGE', settings.LANGUAGE_CODE)
 PING_GOOGLE = getattr(settings, 'STATICSITEMAPS_PING_GOOGLE', True)
-INDEX_TEMPLATE = getattr(settings, 'STATICSITEMAPS_INDEX_TEMPLATE', 
+INDEX_TEMPLATE = getattr(settings, 'STATICSITEMAPS_INDEX_TEMPLATE',
                          'static_sitemaps/sitemap_index.xml')
 
 if DOMAIN is None:
