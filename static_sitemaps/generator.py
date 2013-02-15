@@ -53,6 +53,8 @@ class SitemapGenerator(object):
                     'lastmod': lastmod
                 })
 
+        if not os.path.isdir(conf.ROOT_DIR):
+            os.makedirs(conf.ROOT_DIR, 0755)
         f = open(os.path.join(conf.ROOT_DIR, 'sitemap.xml'), 'w')
         f.write(smart_str(loader.render_to_string(conf.INDEX_TEMPLATE,
                                                   {'sitemaps': parts})))
@@ -102,3 +104,4 @@ class SitemapGenerator(object):
             subprocess.call(['gzip', '-f', os.path.join(conf.ROOT_DIR,
                                                         filename)])
         return file_lastmod
+
