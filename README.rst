@@ -59,7 +59,7 @@ Done.
 prepended the domain to respect the current ``Site`` object. If your
 ``STATIC_URL`` is absolute (generally doesn't start with a '/'), sitemaps
 URL will respect it completely. If you need more detailed control, see
-``STATICSITEMAPS_DOMAIN`` setting.
+``STATICSITEMAPS_URL`` setting.
 
 **Note about sitemap index lastmod:** In the static_sitemaps app the sitemaps 
 index works slightly different than the Django's default behaviour. Just like 
@@ -86,7 +86,11 @@ Advanced settings
     Template path for sitemap index. Defaults to ``static_sitemaps/sitemap_index.xml``. 
 
 ``STATICSITEMAPS_DOMAIN``
-	Set this to the domain from which you serve static files in case it it different from domain of your Django application. Defaults to current site's domain.
+	Same as STATICSITEMAPS_URL, for backward compatibility only.
+
+``STATICSITEMAPS_URL``
+	Set this to the URL from which you want to serve the sitemaps. Can be an URL with and without domain, e.g. http://example.com/media/sitemaps/ or /media/sitemaps/.
+	If no domain is given, the domain of the current Django site is used. Default is STATIC_URL.
 
 ``STATICSITEMAPS_LANGUAGE``
     Language code to use when generating the sitemaps. Defaults to ``LANGUAGE_CODE`` setting.

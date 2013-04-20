@@ -11,6 +11,7 @@ USE_GZIP = getattr(settings, 'STATICSITEMAPS_USE_GZIP', True)
 FILENAME_TEMPLATE = getattr(settings,
                             'STATICSITEMAPS_FILENAME_TEMPLATE',
                             'sitemap-%(section)s-%(page)s.xml')
+URL = getattr(settings, 'STATICSITEMAPS_URL', None)
 DOMAIN = getattr(settings, 'STATICSITEMAPS_DOMAIN', None)
 LANGUAGE = getattr(settings, 'STATICSITEMAPS_LANGUAGE', settings.LANGUAGE_CODE)
 PING_GOOGLE = getattr(settings, 'STATICSITEMAPS_PING_GOOGLE', True)
@@ -20,13 +21,15 @@ INDEX_TEMPLATE = getattr(settings, 'STATICSITEMAPS_INDEX_TEMPLATE',
 CELERY_TASK_REPETITION = getattr(settings, 'STATICSITEMAPS_REFRESH_AFTER', 60 * 60)
 
 
-if DOMAIN is None:
-    if settings.STATIC_URL.startswith('/'):
+if URL is None:
+    if DOMAIN: # backward compatibility
+        URL = DOMAIN
+    elif settings.STATIC_URL.startswith('/'):
         # If STATIC_URL starts with '/', it is probably a relative URL to the
         # current domain so we append STATIC_URL.
         from django.contrib.sites.models import Site
-        DOMAIN = Site.objects.get_current().domain + settings.STATIC_URL
+        URL = Site.objects.get_current().domain + settings.STATIC_URL
     else:
         # If STATIC_URL starts with protocol, it is probably a special domain
         # for static files and we stick to it.
-        DOMAIN = settings.STATIC_URL
+        URL = settings.STATIC_URL
