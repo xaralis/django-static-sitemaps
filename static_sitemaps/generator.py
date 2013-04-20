@@ -28,7 +28,7 @@ class SitemapGenerator(object):
             raise ImproperlyConfigured('Module "%s" does not define a "%s" '
                                        'class.' % (module, attr))
 
-        domain = self.normalize_domain(conf.DOMAIN)
+        url = self.normalize_url(conf.URL)
         parts = []
 
         if not isinstance(sitemaps, dict):
@@ -49,7 +49,7 @@ class SitemapGenerator(object):
                     filename += '.gz'
 
                 parts.append({
-                    'location': '%s%s' % (domain, filename),
+                    'location': '%s%s' % (url, filename),
                     'lastmod': lastmod
                 })
 
@@ -64,17 +64,20 @@ class SitemapGenerator(object):
             try:
                 sitemap_url = reverse('static_sitemaps_index')
             except NoReverseMatch:
-                domain = self.normalize_domain(conf.DOMAIN)
-                sitemap_url = "%ssitemap.xml" % domain
+                sitemap_url = "%ssitemap.xml" % url
 
             ping_google(sitemap_url)
 
-    def normalize_domain(self, domain):
-        if domain[-1] != '/':
-            domain = domain + '/'
-        if not domain.startswith(('http://', 'https://')):
-            domain = 'http://' + domain
-        return domain
+    def normalize_url(self, url):
+        if url[-1] != '/':
+            url = url + '/'
+        if not url.startswith(('http://', 'https://')):
+            if url.startswith('/'):
+                from django.contrib.sites.models import Site
+                url = 'http://' + Site.objects.get_current().domain + url
+            else:
+                url = 'http://' + url
+        return url
 
     def write_page(self, site, page, filename):
         urls = []
