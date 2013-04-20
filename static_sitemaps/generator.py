@@ -34,6 +34,9 @@ class SitemapGenerator(object):
         if not isinstance(sitemaps, dict):
             sitemaps = dict(enumerate(sitemaps))
 
+        if not os.path.isdir(conf.ROOT_DIR):
+            os.makedirs(conf.ROOT_DIR, 0755)
+
         for section, site in sitemaps.items():
             if callable(site):
                 pages = site().paginator.num_pages
@@ -53,8 +56,6 @@ class SitemapGenerator(object):
                     'lastmod': lastmod
                 })
 
-        if not os.path.isdir(conf.ROOT_DIR):
-            os.makedirs(conf.ROOT_DIR, 0755)
         f = open(os.path.join(conf.ROOT_DIR, 'sitemap.xml'), 'w')
         f.write(smart_str(loader.render_to_string(conf.INDEX_TEMPLATE,
                                                   {'sitemaps': parts})))
