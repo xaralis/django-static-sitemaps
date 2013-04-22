@@ -1,7 +1,7 @@
 django-static-sitemaps
 ========================
 
-There are times when your site is too big to serve the ``sitemap.xml`` by your Django application. This little app is meant to help you with such cases. Instead of serving the sitemap.xml from Django, it features a **management command** that generates the ``sitemap.xml`` to the separate files.
+There are times when your site is too big to serve the ``sitemap.xml`` by your Django application. This little app is meant to help you with such cases. Instead of serving the sitemap.xml from Django, it features a **management command**/**celery task** that generates the ``sitemap.xml`` to the separate files.
 
 Feature highlights:
 
@@ -53,6 +53,8 @@ Setup your cron to run::
 periodically. Usually, it's enough to set it to run once by 30 minutes or so.
 
 Done.
+
+Alternatively, you can run this using a Celery task runner. For details, look below.
 
 **Note:** Your sitemap files will be served from ``STATIC_URL`` by default. If your
 ``STATIC_URL`` is a relative one (e.g. ``/static/``), the result will be
