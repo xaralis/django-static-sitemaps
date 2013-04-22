@@ -70,6 +70,11 @@ by your date field will keep this information accurate. This is important to
 inform the crawler how fresh is the information inside each sitemap inside the
 sitemap_index.xml. 
 
+Running as celery task
+----------------------
+
+If you run celery as your task runner, you should be ready to go out of the box. django-static-sitemaps includes the ``GenerateSitemap`` task which should be automatically run each ``STATICSITEMAPS_REFRESH_AFTER`` seconds (defaults to 3600 ~ 1 hour).
+
 Advanced settings
 ------------------
 
@@ -97,6 +102,9 @@ Advanced settings
 
 ``STATICSITEMAPS_PING_GOOGLE``
     Boolean determining whether to ping google after sitemaps have been updated. Defaults to ``True``.
+
+``STATICSITEMAPS_REFRESH_AFTER``
+    How often should the celery task be ran. Defaults to 3600.
 
 
 Using a custom template
