@@ -104,7 +104,7 @@ Advanced settings
     Boolean determining whether to ping google after sitemaps have been updated. Defaults to ``True``.
 
 ``STATICSITEMAPS_REFRESH_AFTER``
-    How often should the celery task be ran. Defaults to 3600.
+    How often should the celery task be run. Defaults to 3600.
 
 
 Using a custom template
