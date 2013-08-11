@@ -5,7 +5,10 @@ Created on 24.10.2011
 '''
 import os
 
-from django.conf.urls.defaults import url, patterns
+try:
+    from django.conf.urls import patterns, url
+except ImportError: # django < 1.4
+    from django.conf.urls.defaults import patterns, url
 from django.http import HttpResponse, Http404
 
 from static_sitemaps import conf

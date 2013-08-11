@@ -18,7 +18,7 @@ PING_GOOGLE = getattr(settings, 'STATICSITEMAPS_PING_GOOGLE', True)
 INDEX_TEMPLATE = getattr(settings, 'STATICSITEMAPS_INDEX_TEMPLATE',
                          'static_sitemaps/sitemap_index.xml')
 
-CELERY_TASK_REPETITION = getattr(settings, 'STATICSITEMAPS_REFRESH_AFTER', 60 * 60)
+CELERY_TASK_REPETITION = getattr(settings, 'STATICSITEMAPS_REFRESH_AFTER', 60)
 
 
 if URL is None:
