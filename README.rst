@@ -86,6 +86,12 @@ Advanced settings
 ``STATICSITEMAPS_USE_GZIP``
 	Defaults to ``True``. If ``True``, gzip compression will be used when generating the sitemaps files (which is very possible by sitemaps specification).
 
+``STATICSITEMAPS_GZIP_METHOD``
+    Gzip method to use. Must be in ['python', 'system', ].
+
+``STATICSITEMAPS_SYSTEM_GZIP_PATH``
+    Path to the gzip binary if use STATICSITEMAPS_GZIP_METHOD == 'system'.
+
 ``STATICSITEMAPS_FILENAME_TEMPLATE``
 	Template for sitemap parts. Defaults to ``sitemap-%(section)s-%(page)s.xml``.
 
@@ -104,6 +110,9 @@ Advanced settings
 
 ``STATICSITEMAPS_PING_GOOGLE``
     Boolean determining whether to ping google after sitemaps have been updated. Defaults to ``True``.
+
+``STATICSITEMAPS_REFRESH_AFTER``
+    How often should the celery task be run. Defaults to 3600.
 
 ``STATICSITEMAPS_REFRESH_AFTER``
     How often should the celery task be run. Defaults to 3600.
