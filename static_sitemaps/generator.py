@@ -1,5 +1,6 @@
 import os
 import subprocess
+import gzip
 
 from django.contrib.sitemaps import ping_google
 from django.core.exceptions import ImproperlyConfigured
@@ -99,13 +100,23 @@ class SitemapGenerator(object):
         if os.path.exists(path):
             os.unlink(path)
 
-        f = open(path, 'w')
-        f.write(smart_str(loader.render_to_string(template,
-                                                  {'urlset': urls})))
-        f.close()
+        with open(path, 'w') as f:
+            f.write(smart_str(loader.render_to_string(template,
+                                                      {'urlset': urls})))
 
         if conf.USE_GZIP:
-            subprocess.call(['gzip', '-f', os.path.join(conf.ROOT_DIR,
-                                                        filename)])
-        return file_lastmod
+            if conf.GZIP_METHOD not in ['python', 'system', ]:
+                raise ImproperlyConfigured("STATICSITEMAPS_GZIP_METHOD must be in ['python', 'system', ]")
 
+            if conf.GZIP_METHOD == 'system' and not os.path.exists(conf.SYSTEM_GZIP_PATH):
+                raise ImproperlyConfigured('STATICSITEMAPS_SYSTEM_GZIP_PATH does not exist')
+
+            if conf.GZIP_METHOD == 'system':  # gzip with system gzip binary
+                subprocess.call([conf.SYSTEM_GZIP_PATH, '-f', path, ])
+            else:  # gzip with python gzip lib
+                with open(path, 'rb') as f:
+                    with gzip.open('%s.gz' % path, 'wb') as gz:
+                        gz.writelines(f)
+                os.unlink(path)
+
+        return file_lastmod
