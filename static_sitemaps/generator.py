@@ -115,8 +115,12 @@ class SitemapGenerator(object):
                 subprocess.call([conf.SYSTEM_GZIP_PATH, '-f', path, ])
             else:  # gzip with python gzip lib
                 with open(path, 'rb') as f:
-                    with gzip.open('%s.gz' % path, 'wb') as gz:
+                    try:
+                        gz = gzip.open('%s.gz' % path, 'wb')
                         gz.writelines(f)
-                os.unlink(path)
+                        gz.close()
+                        os.unlink(path)
+                    except OSError:
+                        print "Compress %s file error" % path
 
         return file_lastmod
