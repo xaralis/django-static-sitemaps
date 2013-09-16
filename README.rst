@@ -75,7 +75,7 @@ sitemap_index.xml.
 Running as celery task
 ----------------------
 
-If you run celery as your task runner, you should be ready to go out of the box. django-static-sitemaps includes the ``GenerateSitemap`` task which will be automatically run each ``STATICSITEMAPS_REFRESH_AFTER`` seconds (defaults to 3600 ~ 1 hour).
+If you run celery as your task runner, you should be ready to go out of the box. django-static-sitemaps includes the ``GenerateSitemap`` task which will be automatically run each ``STATICSITEMAPS_REFRESH_AFTER`` seconds (defaults to 60 ~ 1 hour).
 
 Advanced settings
 ------------------
@@ -112,7 +112,7 @@ Advanced settings
     Boolean determining whether to ping google after sitemaps have been updated. Defaults to ``True``.
 
 ``STATICSITEMAPS_REFRESH_AFTER``
-    How often should the celery task be run. Defaults to 3600.
+    How often should the celery task be run. Defaults to 60.
 
 ``STATICSITEMAPS_REFRESH_AFTER``
     How often should the celery task be run. Defaults to 3600.
