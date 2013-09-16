@@ -3,3 +3,4 @@
 *.pyc
 .idea
 *egg*
+.DS_Store
