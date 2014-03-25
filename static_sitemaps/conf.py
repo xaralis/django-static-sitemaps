@@ -5,6 +5,8 @@ Created on 14.4.2012
 '''
 
 from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+
 
 ROOT_SITEMAP = settings.STATICSITEMAPS_ROOT_SITEMAP
 ROOT_DIR = getattr(settings, 'STATICSITEMAPS_ROOT_DIR', settings.STATIC_ROOT)
@@ -20,12 +22,13 @@ LANGUAGE = getattr(settings, 'STATICSITEMAPS_LANGUAGE', settings.LANGUAGE_CODE)
 PING_GOOGLE = getattr(settings, 'STATICSITEMAPS_PING_GOOGLE', True)
 INDEX_TEMPLATE = getattr(settings, 'STATICSITEMAPS_INDEX_TEMPLATE',
                          'static_sitemaps/sitemap_index.xml')
+STORAGE_CLASS = getattr(settings, 'STATICSITEMAPS_STORAGE', 'django.core.files.storage.FileSystemStorage')
 
 CELERY_TASK_REPETITION = getattr(settings, 'STATICSITEMAPS_REFRESH_AFTER', 60)
 
 
 if URL is None:
-    if DOMAIN: # backward compatibility
+    if DOMAIN:  # backward compatibility
         URL = DOMAIN
     elif settings.STATIC_URL.startswith('/'):
         # If STATIC_URL starts with '/', it is probably a relative URL to the
