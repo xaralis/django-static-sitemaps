@@ -5,7 +5,6 @@ Created on 14.4.2012
 '''
 
 from django.conf import settings
-from django.core.files.storage import FileSystemStorage
 
 
 ROOT_SITEMAP = settings.STATICSITEMAPS_ROOT_SITEMAP

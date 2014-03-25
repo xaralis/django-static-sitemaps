@@ -5,7 +5,6 @@ import subprocess
 
 from django.contrib.sitemaps import ping_google
 from django.core.exceptions import ImproperlyConfigured
-from django.core.files.base import File
 from django.core.files.storage import FileSystemStorage
 from django.core.paginator import EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse, NoReverseMatch
