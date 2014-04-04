@@ -1,4 +1,5 @@
 from cStringIO import StringIO
+import hashlib
 import gzip
 import os
 import subprocess
@@ -26,6 +27,7 @@ class SitemapGenerator(object):
         url = self.normalize_url(conf.URL)
         parts = []
 
+        self.has_changes = False
         if not isinstance(sitemaps, dict):
             sitemaps = dict(enumerate(sitemaps))
         for section, site in sitemaps.items():
@@ -48,7 +50,10 @@ class SitemapGenerator(object):
                 })
 
         name = os.path.join(conf.ROOT_DIR, 'sitemap.xml')
+        old_sitemap_md5 = None
         if storage.exists(name):
+            with open(name) as sitemap_index:
+                old_index_md5 = hashlib.md5(sitemap_index.read()).digest()
             storage.delete(name)
 
         output = loader.render_to_string(conf.INDEX_TEMPLATE,
@@ -57,8 +62,13 @@ class SitemapGenerator(object):
         buf.write(output)
         buf.seek(0)
         storage.save(name, buf)
+        with open(name) as sitemap_index:
+            new_index_md5 = hashlib.md5(sitemap_index.read()).digest()
 
-        if conf.PING_GOOGLE:
+        if old_index_md5 != new_index_md5:
+            self.has_changes = True
+
+        if conf.PING_GOOGLE and self.has_changes:
             try:
                 sitemap_url = reverse('static_sitemaps_index')
             except NoReverseMatch:
@@ -93,7 +103,10 @@ class SitemapGenerator(object):
         path = os.path.join(conf.ROOT_DIR, filename)
         template = getattr(site, 'sitemap_template', 'sitemap.xml')
 
+        old_page_md5 = None
         if storage.exists(path):
+            with open(path) as sitemap_page:
+                old_page_md5 = hashlib.md5(sitemap_page.read()).digest()
             storage.delete(path)
 
         output = smart_str(loader.render_to_string(template, {'urlset': urls}))
@@ -101,6 +114,11 @@ class SitemapGenerator(object):
         buf.write(output)
         buf.seek(0)
         storage.save(path, buf)
+        with open(path) as sitemap_page:
+            new_page_md5 = hashlib.md5(sitemap_page.read()).digest()
+
+        if old_page_md5 != new_page_md5:
+            self.has_changes = True
 
         if conf.USE_GZIP:
             if conf.GZIP_METHOD not in ['python', 'system', ]:
