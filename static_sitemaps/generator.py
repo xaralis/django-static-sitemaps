@@ -52,7 +52,7 @@ class SitemapGenerator(object):
         name = os.path.join(conf.ROOT_DIR, 'sitemap.xml')
         old_sitemap_md5 = None
         if storage.exists(name):
-            with open(name) as sitemap_index:
+            with storage.open(name) as sitemap_index:
                 old_index_md5 = hashlib.md5(sitemap_index.read()).digest()
             storage.delete(name)
 
@@ -62,7 +62,7 @@ class SitemapGenerator(object):
         buf.write(output)
         buf.seek(0)
         storage.save(name, buf)
-        with open(name) as sitemap_index:
+        with storage.open(name) as sitemap_index:
             new_index_md5 = hashlib.md5(sitemap_index.read()).digest()
 
         if old_index_md5 != new_index_md5:
@@ -105,7 +105,7 @@ class SitemapGenerator(object):
 
         old_page_md5 = None
         if storage.exists(path):
-            with open(path) as sitemap_page:
+            with storage.open(path) as sitemap_page:
                 old_page_md5 = hashlib.md5(sitemap_page.read()).digest()
             storage.delete(path)
 
@@ -114,7 +114,7 @@ class SitemapGenerator(object):
         buf.write(output)
         buf.seek(0)
         storage.save(path, buf)
-        with open(path) as sitemap_page:
+        with storage.open(path) as sitemap_page:
             new_page_md5 = hashlib.md5(sitemap_page.read()).digest()
 
         if old_page_md5 != new_page_md5:
