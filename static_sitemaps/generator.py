@@ -21,15 +21,19 @@ __author__ = 'xaralis'
 
 class SitemapGenerator(object):
     def write_index(self):
+        old_index_md5 = None
+        new_index_md5 = None
+        self.has_changes = False
+
         storage = _lazy_load(conf.STORAGE_CLASS)()
         sitemaps = _lazy_load(conf.ROOT_SITEMAP)
 
         url = self.normalize_url(conf.URL)
         parts = []
 
-        self.has_changes = False
         if not isinstance(sitemaps, dict):
             sitemaps = dict(enumerate(sitemaps))
+
         for section, site in sitemaps.items():
             if callable(site):
                 pages = site().paginator.num_pages
@@ -50,18 +54,19 @@ class SitemapGenerator(object):
                 })
 
         name = os.path.join(conf.ROOT_DIR, 'sitemap.xml')
-        old_sitemap_md5 = None
+
         if storage.exists(name):
             with storage.open(name) as sitemap_index:
                 old_index_md5 = hashlib.md5(sitemap_index.read()).digest()
+
             storage.delete(name)
 
-        output = loader.render_to_string(conf.INDEX_TEMPLATE,
-                                                  {'sitemaps': parts})
+        output = loader.render_to_string(conf.INDEX_TEMPLATE, {'sitemaps': parts})
         buf = StringIO()
         buf.write(output)
         buf.seek(0)
         storage.save(name, buf)
+
         with storage.open(name) as sitemap_index:
             new_index_md5 = hashlib.md5(sitemap_index.read()).digest()
 
@@ -88,7 +93,10 @@ class SitemapGenerator(object):
         return url
 
     def write_page(self, site, page, filename, storage):
+        old_page_md5 = None
+        new_page_md5 = None
         urls = []
+
         try:
             if callable(site):
                 urls.extend(site().get_urls(page))
@@ -103,7 +111,6 @@ class SitemapGenerator(object):
         path = os.path.join(conf.ROOT_DIR, filename)
         template = getattr(site, 'sitemap_template', 'sitemap.xml')
 
-        old_page_md5 = None
         if storage.exists(path):
             with storage.open(path) as sitemap_page:
                 old_page_md5 = hashlib.md5(sitemap_page.read()).digest()
@@ -114,6 +121,7 @@ class SitemapGenerator(object):
         buf.write(output)
         buf.seek(0)
         storage.save(path, buf)
+
         with storage.open(path) as sitemap_page:
             new_page_md5 = hashlib.md5(sitemap_page.read()).digest()
 

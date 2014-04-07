@@ -63,14 +63,14 @@ prepended the domain to respect the current ``Site`` object. If your
 URL will respect it completely. If you need more detailed control, see
 ``STATICSITEMAPS_URL`` setting.
 
-**Note about sitemap index lastmod:** In the static_sitemaps app the sitemaps 
-index works slightly different than the Django's default behaviour. Just like 
-Django it also gathers all urls from the generated sitemaps but it also 
-includes a new XML tag ``lastmod``. The date/time set in this tag comes 
-from the first element of the generated file, so reverse sorting your query 
+**Note about sitemap index lastmod:** In the static_sitemaps app the sitemaps
+index works slightly different than the Django's default behaviour. Just like
+Django it also gathers all urls from the generated sitemaps but it also
+includes a new XML tag ``lastmod``. The date/time set in this tag comes
+from the first element of the generated file, so reverse sorting your query
 by your date field will keep this information accurate. This is important to
 inform the crawler how fresh is the information inside each sitemap inside the
-sitemap_index.xml. 
+sitemap_index.xml.
 
 Running as celery task
 ----------------------
@@ -96,7 +96,7 @@ Advanced settings
 	Template for sitemap parts. Defaults to ``sitemap-%(section)s-%(page)s.xml``.
 
 ``STATICSITEMAPS_INDEX_TEMPLATE``
-    Template path for sitemap index. Defaults to ``static_sitemaps/sitemap_index.xml``. 
+    Template path for sitemap index. Defaults to ``static_sitemaps/sitemap_index.xml``.
 
 ``STATICSITEMAPS_DOMAIN``
 	Same as STATICSITEMAPS_URL, for backward compatibility only.
@@ -109,7 +109,7 @@ Advanced settings
     Language code to use when generating the sitemaps. Defaults to ``LANGUAGE_CODE`` setting.
 
 ``STATICSITEMAPS_PING_GOOGLE``
-    Boolean determining whether to ping google after sitemaps have been updated. Defaults to ``True``.
+    Boolean determining whether to ping google after sitemaps have been updated. Defaults to ``True``. Please note that google will only be notified if something changed in the sitemap file set.
 
 ``STATICSITEMAPS_REFRESH_AFTER``
     How often (in minutes) should the celery task be run. Defaults to 60 minutes.
@@ -118,15 +118,13 @@ Advanced settings
 Using a custom template
 -----------------------
 
-If you need to use a template different from the Django's default (for example 
-to generate a Google News sitemap) you can extend the you Sitemap class and 
+If you need to use a template different from the Django's default (for example
+to generate a Google News sitemap) you can extend the you Sitemap class and
 setting a ``sitemap_template`` attribute. For Example:
 
 .. sourcecode::
 
-    from django.contrib.sitemaps import GenericSitemap                               
-                                                                                 
-    class GoogleNewsSitemap(GenericSitemap):                                         
+    from django.contrib.sitemaps import GenericSitemap
+
+    class GoogleNewsSitemap(GenericSitemap):
         sitemap_template = 'sitemap_googlenews.xml'
-
-
