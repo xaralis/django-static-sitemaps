@@ -11,8 +11,9 @@ from django.core.paginator import EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.template import loader
 from django.utils.encoding import smart_str
-from static_sitemaps import conf
+from django.utils import translation
 
+from static_sitemaps import conf
 from static_sitemaps.util import _lazy_load
 
 
@@ -20,70 +21,23 @@ __author__ = 'xaralis'
 
 
 class SitemapGenerator(object):
-    def write_index(self):
-        old_index_md5 = None
-        new_index_md5 = None
+    def __init__(self, verbosity):
+        self.verbosity = verbosity
         self.has_changes = False
+        self.storage = _lazy_load(conf.STORAGE_CLASS)(location=conf.ROOT_DIR)
+        self.sitemaps = _lazy_load(conf.ROOT_SITEMAP)
 
-        storage = _lazy_load(conf.STORAGE_CLASS)()
-        sitemaps = _lazy_load(conf.ROOT_SITEMAP)
+        if not isinstance(self.sitemaps, dict):
+            self.sitemaps = dict(enumerate(self.sitemaps))
 
-        url = self.normalize_url(conf.URL)
-        parts = []
+    @staticmethod
+    def get_hash(bytestream):
+        return hashlib.md5(bytestream).digest()
 
-        if not isinstance(sitemaps, dict):
-            sitemaps = dict(enumerate(sitemaps))
-
-        for section, site in sitemaps.items():
-            if callable(site):
-                pages = site().paginator.num_pages
-            else:
-                pages = site.paginator.num_pages
-
-            for page in range(1, pages + 1):
-                filename = conf.FILENAME_TEMPLATE % {'section': section,
-                                                     'page': page}
-                lastmod = self.write_page(site, page, filename, storage)
-
-                if conf.USE_GZIP:
-                    filename += '.gz'
-
-                parts.append({
-                    'location': '%s%s' % (url, filename),
-                    'lastmod': lastmod
-                })
-
-        name = os.path.join(conf.ROOT_DIR, 'sitemap.xml')
-
-        if storage.exists(name):
-            with storage.open(name) as sitemap_index:
-                old_index_md5 = hashlib.md5(sitemap_index.read()).digest()
-
-            storage.delete(name)
-
-        output = loader.render_to_string(conf.INDEX_TEMPLATE, {'sitemaps': parts})
-        buf = StringIO()
-        buf.write(output)
-        buf.seek(0)
-        storage.save(name, buf)
-
-        with storage.open(name) as sitemap_index:
-            new_index_md5 = hashlib.md5(sitemap_index.read()).digest()
-
-        if old_index_md5 != new_index_md5:
-            self.has_changes = True
-
-        if conf.PING_GOOGLE and self.has_changes:
-            try:
-                sitemap_url = reverse('static_sitemaps_index')
-            except NoReverseMatch:
-                sitemap_url = "%ssitemap.xml" % url
-
-            ping_google(sitemap_url)
-
-    def normalize_url(self, url):
+    @staticmethod
+    def normalize_url(url):
         if url[-1] != '/':
-            url = url + '/'
+            url += '/'
         if not url.startswith(('http://', 'https://')):
             if url.startswith('/'):
                 from django.contrib.sites.models import Site
@@ -92,9 +46,80 @@ class SitemapGenerator(object):
                 url = 'http://' + url
         return url
 
-    def write_page(self, site, page, filename, storage):
+    def _write(self, path, output):
+        buf = StringIO()
+        buf.write(output)
+        buf.seek(0)
+        self.storage.save(path, buf)
+
+    def read_hash(self, path):
+        with self.storage.open(path) as f:
+            result = self.get_hash(f.read())
+        return result
+
+    def out(self, string, min_level=1):
+        if self.verbosity >= min_level:
+            print string
+
+    def write(self):
+        self.out('Generating sitemaps.', 1)
+        translation.activate(conf.LANGUAGE)
+        self.write_index()
+        translation.deactivate()
+        self.out('Finished generating sitemaps.', 1)
+
+    def write_index(self):
+        old_index_md5 = None
+
+        baseurl = self.normalize_url(conf.URL)
+        parts = []
+
+        # Collect all pages and write them.
+        for section, site in self.sitemaps.items():
+            if callable(site):
+                pages = site().paginator.num_pages
+            else:
+                pages = site.paginator.num_pages
+
+            for page in range(1, pages + 1):
+                filename = conf.FILENAME_TEMPLATE % {'section': section,
+                                                     'page': page}
+                lastmod = self.write_page(site, page, filename)
+
+                if conf.USE_GZIP:
+                    filename += '.gz'
+
+                parts.append({
+                    'location': '%s%s' % (baseurl, filename),
+                    'lastmod': lastmod
+                })
+
+        path = os.path.join(conf.ROOT_DIR, 'sitemap.xml')
+        self.out('Writing index file.', 2)
+
+        if self.storage.exists(path):
+            old_index_md5 = self.read_hash(path)
+            self.storage.delete(path)
+
+        output = loader.render_to_string(conf.INDEX_TEMPLATE, {'sitemaps': parts})
+        self._write(path, output)
+
+        with self.storage.open(path) as sitemap_index:
+            if self.get_hash(sitemap_index.read()) != old_index_md5:
+                self.has_changes = True
+
+        if conf.PING_GOOGLE and self.has_changes:
+            try:
+                sitemap_url = reverse('static_sitemaps_index')
+            except NoReverseMatch:
+                sitemap_url = "%ssitemap.xml" % baseurl
+
+            self.out('Pinging google...', 2)
+            ping_google(sitemap_url)
+
+    def write_page(self, site, page, filename):
+        self.out('Writing sitemap %s.' % filename, 2)
         old_page_md5 = None
-        new_page_md5 = None
         urls = []
 
         try:
@@ -103,34 +128,28 @@ class SitemapGenerator(object):
             else:
                 urls.extend(site.get_urls(page))
         except EmptyPage:
-            print "Page %s empty" % page
+            self.out("Page %s empty" % page)
         except PageNotAnInteger:
-            print "No page '%s'" % page
+            self.out("No page '%s'" % page)
 
         file_lastmod = urls[0].get('lastmod') if urls else None
         path = os.path.join(conf.ROOT_DIR, filename)
         template = getattr(site, 'sitemap_template', 'sitemap.xml')
 
-        if storage.exists(path):
-            with storage.open(path) as sitemap_page:
-                old_page_md5 = hashlib.md5(sitemap_page.read()).digest()
-            storage.delete(path)
+        if self.storage.exists(path):
+            old_page_md5 = self.read_hash(path)
+            self.storage.delete(path)
 
         output = smart_str(loader.render_to_string(template, {'urlset': urls}))
-        buf = StringIO()
-        buf.write(output)
-        buf.seek(0)
-        storage.save(path, buf)
+        self._write(path, output)
 
-        with storage.open(path) as sitemap_page:
-            new_page_md5 = hashlib.md5(sitemap_page.read()).digest()
-
-        if old_page_md5 != new_page_md5:
-            self.has_changes = True
+        with self.storage.open(path) as sitemap_page:
+            if old_page_md5 != self.get_hash(sitemap_page.read()):
+                self.has_changes = True
 
         if conf.USE_GZIP:
             if conf.GZIP_METHOD not in ['python', 'system', ]:
-                raise ImproperlyConfigured("STATICSITEMAPS_GZIP_METHOD must be in ['python', 'system', ]")
+                raise ImproperlyConfigured("STATICSITEMAPS_GZIP_METHOD must be in ['python', 'system']")
 
             if conf.GZIP_METHOD == 'system' and not os.path.exists(conf.SYSTEM_GZIP_PATH):
                 raise ImproperlyConfigured('STATICSITEMAPS_SYSTEM_GZIP_PATH does not exist')
@@ -138,19 +157,22 @@ class SitemapGenerator(object):
             if conf.GZIP_METHOD == 'system' and not isinstance(conf.SYSTEM_GZIP_PATH, FileSystemStorage):
                 raise ImproperlyConfigured('system gzip method can only be used with FileSystemStorage')
 
-            if conf.GZIP_METHOD == 'system':  # gzip with system gzip binary
+            if conf.GZIP_METHOD == 'system':
+                # GZIP with system gzip binary
                 subprocess.call([conf.SYSTEM_GZIP_PATH, '-f', path, ])
-            else:  # gzip with python gzip lib
+            else:
+                # GZIP with python gzip lib
                 try:
                     gzipped_path = '%s.gz' % path
-                    if storage.exists(gzipped_path):
-                        storage.delete(gzipped_path)
+                    if self.storage.exists(gzipped_path):
+                        self.storage.delete(gzipped_path)
 
+                    self.out('Compressing...', 2)
                     buf = StringIO()
                     with gzip.GzipFile(fileobj=buf, mode="w") as f:
                         f.write(output)
-                    storage.save(gzipped_path, buf)
+                    self.storage.save(gzipped_path, buf)
                 except OSError:
-                    print "Compress %s file error" % path
+                    self.out("Compress %s file error" % path)
 
         return file_lastmod

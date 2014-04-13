@@ -7,7 +7,7 @@ Feature highlights:
 
 * Generate sitemap files to your STATIC/MEDIA/(own choice) directory
 * Split sitemap files when limit for size is reached
-* Gzip the sitemap files when required
+* gzip the sitemap files when required
 * Set different domain for sitemap file
 * Ping google that sitemap has changed
 
@@ -97,9 +97,6 @@ Advanced settings
 
 ``STATICSITEMAPS_INDEX_TEMPLATE``
     Template path for sitemap index. Defaults to ``static_sitemaps/sitemap_index.xml``.
-
-``STATICSITEMAPS_DOMAIN``
-	Same as STATICSITEMAPS_URL, for backward compatibility only.
 
 ``STATICSITEMAPS_URL``
 	Set this to the URL from which you want to serve the sitemaps. Can be an URL with and without domain, e.g. http://example.com/media/sitemaps/ or /media/sitemaps/.
