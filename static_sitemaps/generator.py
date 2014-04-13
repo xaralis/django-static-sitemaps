@@ -132,7 +132,8 @@ class SitemapGenerator(object):
         except PageNotAnInteger:
             self.out("No page '%s'" % page)
 
-        file_lastmod = urls[0].get('lastmod') if urls else None
+        lastmods = [lastmod for lastmod in [u.get('lastmod') for u in urls] if lastmod is not None]
+        file_lastmod = max(lastmods) if len(lastmods) > 0 else None
         path = os.path.join(conf.ROOT_DIR, filename)
         template = getattr(site, 'sitemap_template', 'sitemap.xml')
 
