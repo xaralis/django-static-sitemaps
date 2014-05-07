@@ -21,10 +21,6 @@ FILENAME_TEMPLATE = getattr(settings,
                             'STATICSITEMAPS_FILENAME_TEMPLATE',
                             'sitemap-%(section)s-%(page)s.xml')
 
-
-# URL to serve sitemaps from.
-URL = getattr(settings, 'STATICSITEMAPS_URL', None)
-
 # Only for backwards compatibility, same as URL.
 DOMAIN = getattr(settings, 'STATICSITEMAPS_DOMAIN', None)
 
@@ -44,11 +40,18 @@ STORAGE_CLASS = getattr(settings, 'STATICSITEMAPS_STORAGE', 'django.core.files.s
 # How often should the celery task be run.
 CELERY_TASK_REPETITION = getattr(settings, 'STATICSITEMAPS_REFRESH_AFTER', 60)
 
-if URL is None:
+# URL to serve sitemaps from.
+_url = getattr(settings, 'STATICSITEMAPS_URL', None)
+
+def get_url():
+    _url = getattr(settings, 'STATICSITEMAPS_URL', None)
+    if _url is not None:
+        return _url
+
     if DOMAIN:
         # Backwards compatibility.
         import warnings
-        URL = DOMAIN
+        _url = DOMAIN
         warnings.warn('You are using STATICSITEMAPS_DOMAIN which is going to be '
                       'deprecated soon. Please migrate to '
                       'STATICSITEMAPS_URL', DeprecationWarning)
@@ -56,8 +59,9 @@ if URL is None:
         # If STATIC_URL starts with '/', it is probably a relative URL to the
         # current domain so we append STATIC_URL.
         from django.contrib.sites.models import Site
-        URL = Site.objects.get_current().domain + settings.STATIC_URL
+        _url = Site.objects.get_current().domain + settings.STATIC_URL
     else:
         # If STATIC_URL starts with protocol, it is probably a special domain
         # for static files and we stick to it.
-        URL = settings.STATIC_URL
+        _url = settings.STATIC_URL
+    return _url
