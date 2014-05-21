@@ -6,6 +6,7 @@ import subprocess
 
 from django.contrib.sitemaps import ping_google
 from django.core.exceptions import ImproperlyConfigured
+from django.core.files import File 
 from django.core.files.storage import FileSystemStorage
 from django.core.paginator import EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse, NoReverseMatch
@@ -50,7 +51,7 @@ class SitemapGenerator(object):
         buf = StringIO()
         buf.write(output)
         buf.seek(0)
-        self.storage.save(path, buf)
+        self.storage.save(path, File(buf))
 
     def read_hash(self, path):
         with self.storage.open(path) as f:
@@ -71,7 +72,7 @@ class SitemapGenerator(object):
     def write_index(self):
         old_index_md5 = None
 
-        baseurl = self.normalize_url(conf.URL)
+        baseurl = self.normalize_url(conf.get_url())
         parts = []
 
         # Collect all pages and write them.
@@ -172,7 +173,7 @@ class SitemapGenerator(object):
                     buf = StringIO()
                     with gzip.GzipFile(fileobj=buf, mode="w") as f:
                         f.write(output)
-                    self.storage.save(gzipped_path, buf)
+                    self.storage.save(gzipped_path, File(buf))
                 except OSError:
                     self.out("Compress %s file error" % path)
 
