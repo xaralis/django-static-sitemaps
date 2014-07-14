@@ -37,4 +37,5 @@ setup(
     setup_requires=[
         'setuptools_dummy',
     ],
+    zip_safe=False,
 )
