@@ -4,7 +4,7 @@ import static_sitemaps
 setup(
     name='django-static-sitemaps',
     version=static_sitemaps.__versionstr__,
-    description='',
+    description='Tool for generating sitemaps as static files',
     long_description='\n'.join((
         '',
     )),
