@@ -27,7 +27,7 @@ def serve_index(request):
     f = storage.open(path)
     content = f.readlines()
     f.close()
-    return HttpResponse(content, mimetype='application/xml')
+    return HttpResponse(content, content_type='application/xml')
 
 urlpatterns = patterns('',
     url(r'^', serve_index, name='static_sitemaps_index'),
