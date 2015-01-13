@@ -18,7 +18,7 @@ except ImportError:  # django < 1.4
 
 
 def serve_index(request):
-    storage = _lazy_load(conf.STORAGE_CLASS)()
+    storage = _lazy_load(conf.STORAGE_CLASS)(location=conf.ROOT_DIR)
     path = os.path.join(conf.ROOT_DIR, 'sitemap.xml')
     if not storage.exists(path):
         raise Http404('No sitemap index file found on %r. Run django-admin.py '
