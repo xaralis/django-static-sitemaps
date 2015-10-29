@@ -87,8 +87,12 @@ class SitemapGenerator(object):
                 if conf.USE_GZIP:
                     filename += '.gz'
 
+                filename = self.storage.url(
+                    '%s%s' % (conf.ROOT_DIR, filename)
+                )
+
                 parts.append({
-                    'location': '%s%s' % (baseurl, filename),
+                    'location': filename,
                     'lastmod': lastmod
                 })
 
