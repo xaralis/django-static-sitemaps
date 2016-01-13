@@ -34,7 +34,7 @@ setup(
         'setuptools>=0.6b1',
         'Django',
     ],
-    setup_requires=[
-        'setuptools_dummy',
-    ],
+    # setup_requires=[
+    #     'setuptools_dummy',
+    # ],
 )
