@@ -6,8 +6,8 @@ Created on 24.10.2011
 import os
 
 from django.http import HttpResponse, Http404
-from static_sitemaps import conf
 
+from static_sitemaps import conf
 from static_sitemaps.util import _lazy_load
 
 
@@ -29,6 +29,6 @@ def serve_index(request):
     f.close()
     return HttpResponse(content, content_type='application/xml')
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^', serve_index, name='static_sitemaps_index'),
-)
+]

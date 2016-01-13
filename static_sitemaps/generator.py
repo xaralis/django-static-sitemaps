@@ -1,6 +1,10 @@
-from cStringIO import StringIO
-import hashlib
+from __future__ import print_function
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from io import StringIO
 import gzip
+import hashlib
 import os
 import subprocess
 
@@ -11,8 +15,8 @@ from django.core.files.storage import FileSystemStorage
 from django.core.paginator import EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.template import loader
-from django.utils.encoding import smart_str
 from django.utils import translation
+from django.utils.encoding import smart_str
 
 from static_sitemaps import conf
 from static_sitemaps.util import _lazy_load
@@ -57,7 +61,7 @@ class SitemapGenerator(object):
 
     def out(self, string, min_level=1):
         if self.verbosity >= min_level:
-            print string
+            print(string)
 
     def write(self):
         self.out('Generating sitemaps.', 1)
