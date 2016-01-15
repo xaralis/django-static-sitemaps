@@ -29,6 +29,6 @@ def serve_index(request):
     f.close()
     return HttpResponse(content, content_type='application/xml')
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^', serve_index, name='static_sitemaps_index'),
-)
+]
