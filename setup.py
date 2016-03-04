@@ -25,6 +25,8 @@ setup(
         "Programming Language :: Python :: 2.5",
         "Programming Language :: Python :: 2.6",
         "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3.4",
+        "Programming Language :: Python :: 3.5",
         "Operating System :: POSIX",
         "Operating System :: POSIX :: Linux",
         "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
@@ -32,9 +34,6 @@ setup(
     ],
     install_requires=[
         'setuptools>=0.6b1',
-        'Django',
+        'Django>=1.8',
     ],
-    # setup_requires=[
-    #     'setuptools_dummy',
-    # ],
 )
