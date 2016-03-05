@@ -15,7 +15,7 @@ Feature highlights:
 Requirements
 ------------
 
-The only requirement is Django 1.3+. App should work with older Django versions with some settings
+The only requirement is Django 1.8+. App should work with older Django versions with some settings
 tweaks. In matter of fact just defining ``STATICSITEMAPS_ROOT_DIR`` (in case
 you have no ``STATIC_ROOT`` defined) should be enough.
 
@@ -43,9 +43,9 @@ Include ``static_sitemaps.urls`` to your ``urls.py`` to serve the root
 ``sitemap.xml`` if you want to serve index file through Django (might be
 usefull sometimes when it's hard for you to serve it by webserver itself)::
 
-	urlpatterns = patterns('',
+	urlpatterns = [
 		url(r'^sitemap.xml', include('static_sitemaps.urls')),
-	)
+	]
 
 Setup your cron to run::
 
