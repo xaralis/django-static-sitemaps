@@ -5,6 +5,7 @@ There are times when your site is too big to serve the ``sitemap.xml`` by your D
 
 Feature highlights:
 
+* **NEW:** Python 3 compatible
 * Generate sitemap files to your STATIC/MEDIA/(own choice) directory
 * Split sitemap files when limit for size is reached
 * gzip the sitemap files when required
