@@ -6,8 +6,8 @@ Created on 24.10.2011
 import os
 
 from django.http import HttpResponse, Http404
-from static_sitemaps import conf
 
+from static_sitemaps import conf
 from static_sitemaps.util import _lazy_load
 
 
