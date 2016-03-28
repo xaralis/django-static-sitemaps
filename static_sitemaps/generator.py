@@ -1,8 +1,5 @@
 from __future__ import print_function
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from io import StringIO
+
 import gzip
 import hashlib
 import os
@@ -17,7 +14,7 @@ from django.core.urlresolvers import reverse, NoReverseMatch
 from django.template import loader
 from django.utils import translation
 from django.utils.encoding import smart_str
-
+from six import BytesIO
 from static_sitemaps import conf
 from static_sitemaps.util import _lazy_load
 
@@ -171,9 +168,9 @@ class SitemapGenerator(object):
                         self.storage.delete(gzipped_path)
 
                     self.out('Compressing...', 2)
-                    buf = StringIO()
+                    buf = BytesIO()
                     with gzip.GzipFile(fileobj=buf, mode="w") as f:
-                        f.write(output)
+                        f.write(output.encode('utf-8'))
                     self.storage.save(gzipped_path, ContentFile(buf.getvalue()))
                 except OSError:
                     self.out("Compress %s file error" % path)
