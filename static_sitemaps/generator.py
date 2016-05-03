@@ -1,4 +1,5 @@
 from __future__ import print_function
+
 try:
     from cStringIO import StringIO
 except ImportError:
@@ -20,7 +21,6 @@ from django.utils.encoding import smart_str
 
 from static_sitemaps import conf
 from static_sitemaps.util import _lazy_load
-
 
 __author__ = 'xaralis'
 
@@ -124,11 +124,23 @@ class SitemapGenerator(object):
         old_page_md5 = None
         urls = []
 
+        if conf.MOCK_SITE:
+            if conf.MOCK_SITE_NAME is None:
+                raise ImproperlyConfigured("STATICSITEMAPS_MOCK_SITE_NAME must not be None. Try setting to www.yoursite.com")
+            from django.contrib.sites.requests import RequestSite
+            from django.test.client import RequestFactory
+            rs = RequestSite(RequestFactory().get('/', SERVER_NAME=conf.MOCK_SITE_NAME))
         try:
             if callable(site):
-                urls.extend(site().get_urls(page))
+                if conf.MOCK_SITE:
+                    urls.extend(site().get_urls(page, rs, protocol=conf.MOCK_SITE_PROTOCOL))
+                else:
+                    urls.extend(site().get_urls(page))
             else:
-                urls.extend(site.get_urls(page))
+                if conf.MOCK_SITE:
+                    urls.extend(site.get_urls(page, rs, protocol=conf.MOCK_SITE_PROTOCOL))
+                else:
+                    urls.extend(site.get_urls(page))
         except EmptyPage:
             self.out("Page %s empty" % page)
         except PageNotAnInteger:

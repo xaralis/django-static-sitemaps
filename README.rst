@@ -112,6 +112,15 @@ Advanced settings
 ``STATICSITEMAPS_REFRESH_AFTER``
     How often (in minutes) should the celery task be run. Defaults to 60 minutes.
 
+``STATICSITEMAPS_MOCK_SITE``
+    True|False setting if you want to mock the Django sites framework. Useful if you want to use package without enabling django.contrib.sites. Defaults to False.
+
+``STATICSITEMAPS_MOCK_SITE_NAME``
+    URL of the site your mocking. This is what will show up in your sitemap as the URL. For example: 'www.yoursite.com'. Defaults to None.
+
+``STATICSITEMAPS_MOCK_SITE_PROTOCOL``
+    Protocol to use when mocking above site name. Defaults to 'http'.
+
 
 Using a custom template
 -----------------------
