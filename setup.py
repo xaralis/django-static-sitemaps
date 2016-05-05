@@ -34,6 +34,7 @@ setup(
     ],
     install_requires=[
         'setuptools>=0.6b1',
+        'six',
         'Django>=1.8',
     ],
 )
