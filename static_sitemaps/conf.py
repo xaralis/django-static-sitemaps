@@ -43,6 +43,16 @@ CELERY_TASK_REPETITION = getattr(settings, 'STATICSITEMAPS_REFRESH_AFTER', 60)
 # URL to serve sitemaps from.
 _url = getattr(settings, 'STATICSITEMAPS_URL', None)
 
+# Mock django sites framework
+MOCK_SITE = getattr(settings, 'STATICSITEMAPS_MOCK_SITE', False)
+
+# Mock django sites framework with hostname string...for example www.yoursite.com
+MOCK_SITE_NAME = getattr(settings, 'STATICSITEMAPS_MOCK_SITE_NAME', None)
+
+# Mock django sites framework with https | https
+MOCK_SITE_PROTOCOL = getattr(settings, 'STATICSITEMAPS_MOCK_SITE_PROTOCOL', 'http')
+
+
 def get_url():
     _url = getattr(settings, 'STATICSITEMAPS_URL', None)
     if _url is not None:
