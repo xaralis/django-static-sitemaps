@@ -170,7 +170,7 @@ class SitemapGenerator(object):
             if conf.GZIP_METHOD == 'system' and not os.path.exists(conf.SYSTEM_GZIP_PATH):
                 raise ImproperlyConfigured('STATICSITEMAPS_SYSTEM_GZIP_PATH does not exist')
 
-            if conf.GZIP_METHOD == 'system' and not isinstance(conf.SYSTEM_GZIP_PATH, FileSystemStorage):
+            if conf.GZIP_METHOD == 'system' and not isinstance(self.storage, FileSystemStorage):
                 raise ImproperlyConfigured('system gzip method can only be used with FileSystemStorage')
 
             if conf.GZIP_METHOD == 'system':
