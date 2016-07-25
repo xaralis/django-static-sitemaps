@@ -121,6 +121,9 @@ Advanced settings
 ``STATICSITEMAPS_MOCK_SITE_PROTOCOL``
     Protocol to use when mocking above site name. Defaults to 'http'.
 
+``STATICSITEMAPS_STORAGE``
+    Storage class to use. Defaults to ``django.core.files.storage.FileSystemStorage``.
+
 
 Using a custom template
 -----------------------
