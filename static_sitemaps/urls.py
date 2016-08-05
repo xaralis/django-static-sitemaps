@@ -12,7 +12,7 @@ from static_sitemaps.util import _lazy_load
 
 
 try:
-    from django.conf.urls import patterns, url
+    from django.conf.urls import url
 except ImportError:  # django < 1.4
     from django.conf.urls.defaults import patterns, url
 
