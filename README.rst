@@ -17,8 +17,7 @@ Requirements
 ------------
 
 The only requirement is Django 1.8+. App should work with older Django versions with some settings
-tweaks. In matter of fact just defining ``STATICSITEMAPS_ROOT_DIR`` (in case
-you have no ``STATIC_ROOT`` defined) should be enough.
+tweaks.
 
 Usage
 ------
