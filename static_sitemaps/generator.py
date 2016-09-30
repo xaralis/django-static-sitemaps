@@ -53,6 +53,7 @@ class SitemapGenerator(object):
         return url
 
     def _write(self, path, output):
+        output = bytes(output, "utf8") # botoS3 has some issues with encoding in Python 3
         self.storage.save(path, ContentFile(output))
 
     def read_hash(self, path):
