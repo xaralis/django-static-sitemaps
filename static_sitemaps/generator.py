@@ -27,10 +27,11 @@ __author__ = 'xaralis'
 
 
 class SitemapGenerator(object):
+
     def __init__(self, verbosity):
         self.verbosity = verbosity
         self.has_changes = False
-        self.storage = _lazy_load(conf.STORAGE_CLASS)(location=conf.ROOT_DIR)
+        self.storage = _lazy_load(conf.STORAGE_CLASS)(location='/')
         self.sitemaps = _lazy_load(conf.ROOT_SITEMAP)
 
         if not isinstance(self.sitemaps, dict):
@@ -97,7 +98,7 @@ class SitemapGenerator(object):
                     'lastmod': lastmod
                 })
 
-        path = os.path.join(conf.ROOT_DIR, 'sitemap.xml')
+        path = os.path.join(conf.ROOT_DIR, conf.ROOT_SITEMAP_NAME)
         self.out('Writing index file.', 2)
 
         if self.storage.exists(path):
@@ -127,7 +128,8 @@ class SitemapGenerator(object):
 
         if conf.MOCK_SITE:
             if conf.MOCK_SITE_NAME is None:
-                raise ImproperlyConfigured("STATICSITEMAPS_MOCK_SITE_NAME must not be None. Try setting to www.yoursite.com")
+                raise ImproperlyConfigured(
+                    "STATICSITEMAPS_MOCK_SITE_NAME must not be None. Try setting to www.yoursite.com")
             from django.contrib.sites.requests import RequestSite
             from django.test.client import RequestFactory
             rs = RequestSite(RequestFactory().get('/', SERVER_NAME=conf.MOCK_SITE_NAME))

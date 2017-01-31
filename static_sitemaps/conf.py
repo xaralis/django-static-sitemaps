@@ -20,6 +20,8 @@ SYSTEM_GZIP_PATH = getattr(settings, 'STATICSITEMAPS_SYSTEM_GZIP_PATH', '/usr/bi
 FILENAME_TEMPLATE = getattr(settings,
                             'STATICSITEMAPS_FILENAME_TEMPLATE',
                             'sitemap-%(section)s-%(page)s.xml')
+# Sitemap name can be different than sitemap.xml so making it customizable.
+ROOT_SITEMAP_NAME = getattr(settings, 'STATICSITEMAPS_ROOT_SITEMAP_NAME', 'sitemap.xml')
 
 # Only for backwards compatibility, same as URL.
 DOMAIN = getattr(settings, 'STATICSITEMAPS_DOMAIN', None)
