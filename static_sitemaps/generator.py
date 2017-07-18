@@ -136,12 +136,12 @@ class SitemapGenerator(object):
                 if conf.MOCK_SITE:
                     urls.extend(site().get_urls(page, rs, protocol=conf.MOCK_SITE_PROTOCOL))
                 else:
-                    urls.extend(site().get_urls(page))
+                    urls.extend(site().get_urls(page, protocol=conf.FORCE_PROTOCOL))
             else:
                 if conf.MOCK_SITE:
                     urls.extend(site.get_urls(page, rs, protocol=conf.MOCK_SITE_PROTOCOL))
                 else:
-                    urls.extend(site.get_urls(page))
+                    urls.extend(site.get_urls(page, protocol=conf.FORCE_PROTOCOL))
         except EmptyPage:
             self.out("Page %s empty" % page)
         except PageNotAnInteger:
