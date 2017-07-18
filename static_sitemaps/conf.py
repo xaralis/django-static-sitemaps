@@ -44,7 +44,7 @@ CELERY_TASK_REPETITION = getattr(settings, 'STATICSITEMAPS_REFRESH_AFTER', 60)
 _url = getattr(settings, 'STATICSITEMAPS_URL', None)
 
 # Force the protocol to use with django sites framework
-FORCE_PROTOCOL = getattr(settings, 'STATICSITEMAPS_FORCE_PROTOCOL', 'http')
+FORCE_PROTOCOL = getattr(settings, 'STATICSITEMAPS_FORCE_PROTOCOL', None)
 
 # Mock django sites framework
 MOCK_SITE = getattr(settings, 'STATICSITEMAPS_MOCK_SITE', False)
