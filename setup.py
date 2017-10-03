@@ -16,8 +16,7 @@ setup(
     packages=(
         'static_sitemaps',
         'static_sitemaps.management',
-        'static_sitemaps.management.commands',
-        'static_sitemaps.templates'),
+        'static_sitemaps.management.commands'),
 
     include_package_data=True,
 
