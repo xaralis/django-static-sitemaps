@@ -44,7 +44,7 @@ Include ``static_sitemaps.urls`` to your ``urls.py`` to serve the root
 usefull sometimes when it's hard for you to serve it by webserver itself)::
 
 	urlpatterns = [
-		url(r'^sitemap.xml', include('static_sitemaps.urls')),
+		url(r'', include('static_sitemaps.urls')),
 	]
 
 Setup your cron to run::
