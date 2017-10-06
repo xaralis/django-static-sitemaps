@@ -7,4 +7,4 @@ This results in better performance for sites with loads of content and/or URLS.
 App is dependent on original django.contrib.sitemaps application which
 has to be included in order for this to work.
 """
-__versionstr__ = '4.3.0'
+__versionstr__ = '4.4.0'
