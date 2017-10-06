@@ -1,0 +1,5 @@
+include README.rst
+include MANIFEST.in
+recursive-include templates *
+global-exclude __pycache__
+global-exclude *.pyc

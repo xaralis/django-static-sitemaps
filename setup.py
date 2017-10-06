@@ -13,7 +13,10 @@ setup(
     license='BSD',
     url='http://github.com/xaralis/django-static-sitemaps',
 
-    packages=('static_sitemaps',),
+    packages=(
+        'static_sitemaps',
+        'static_sitemaps.management',
+        'static_sitemaps.management.commands'),
 
     include_package_data=True,
 
