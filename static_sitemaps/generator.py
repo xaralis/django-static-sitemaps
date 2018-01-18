@@ -15,7 +15,10 @@ from django.core.exceptions import ImproperlyConfigured
 from django.core.files.base import ContentFile
 from django.core.files.storage import FileSystemStorage
 from django.core.paginator import EmptyPage, PageNotAnInteger
-from django.core.urlresolvers import reverse, NoReverseMatch
+try:
+    from django.core.urlresolvers import reverse, NoReverseMatch
+except ImportError:  # Django >= 2.0
+    from django.urls import reverse, NoReverseMatch
 from django.template import loader
 from django.utils import translation
 from django.utils.encoding import smart_str
