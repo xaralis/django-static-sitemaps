@@ -30,7 +30,11 @@ class SitemapGenerator(object):
     def __init__(self, verbosity):
         self.verbosity = verbosity
         self.has_changes = False
-        self.storage = _lazy_load(conf.STORAGE_CLASS)(location=conf.ROOT_DIR)
+        try:
+            self.storage = _lazy_load(conf.STORAGE_CLASS)(location=conf.ROOT_DIR)
+        except TypeError:
+            self.storage = _lazy_load(conf.STORAGE_CLASS)()
+
         self.sitemaps = _lazy_load(conf.ROOT_SITEMAP)
 
         if not isinstance(self.sitemaps, dict):
@@ -53,7 +57,7 @@ class SitemapGenerator(object):
         return url
 
     def _write(self, path, output):
-        output = bytes(output, "utf8") # botoS3 has some issues with encoding in Python 3
+        output = bytes(output, "utf8")  # botoS3 has some issues with encoding in Python 3
         self.storage.save(path, ContentFile(output))
 
     def read_hash(self, path):
