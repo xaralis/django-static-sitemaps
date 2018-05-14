@@ -49,11 +49,13 @@ class SitemapGenerator(object):
         if url[-1] != '/':
             url += '/'
         if not url.startswith(('http://', 'https://')):
+            protocol = conf.FORCE_PROTOCOL or 'http'
+            prefix = '%s://' % protocol
             if url.startswith('/'):
                 from django.contrib.sites.models import Site
-                url = 'http://' + Site.objects.get_current().domain + url
+                url = prefix + Site.objects.get_current().domain + url
             else:
-                url = 'http://' + url
+                url = prefix + url
         return url
 
     def _write(self, path, output):
