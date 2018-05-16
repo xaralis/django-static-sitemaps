@@ -11,7 +11,11 @@ class SitemapView(View):
     def get(self, request, *args, **kwargs):
         section = kwargs.get('section')
 
-        storage = _lazy_load(conf.STORAGE_CLASS)(location=conf.ROOT_DIR)
+        try:
+            storage = _lazy_load(conf.STORAGE_CLASS)(location=conf.ROOT_DIR)
+        except TypeError:
+            storage = _lazy_load(conf.STORAGE_CLASS)()
+
         path = os.path.join(conf.ROOT_DIR, '{}.xml'.format(section))
         if not storage.exists(path):
             raise Http404('No sitemap file found on %r. Run django-admin.py '
