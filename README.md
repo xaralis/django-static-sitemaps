@@ -5,7 +5,7 @@ There are times when your site is too big to serve the ``sitemap.xml`` by your D
 
 Feature highlights:
 
-* **NEW:** Compatible with Django 1.8+
+* **NEW:** Compatible with Django 2.0+
 * **NEW:** Python 3 compatible
 * Generate sitemap files to your STATIC/MEDIA/(own choice) directory
 * Split sitemap files when limit for size is reached
@@ -16,7 +16,7 @@ Feature highlights:
 Requirements
 ------------
 
-The only requirement is Django 1.8+. App should work with older Django versions with some settings
+The only requirement is Django 2.0+. App should work with older Django versions with some settings
 tweaks.
 
 Usage
