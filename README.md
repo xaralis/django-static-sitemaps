@@ -16,7 +16,7 @@ Feature highlights:
 Requirements
 ------------
 
-The only requirement is Django 2.0+. App should work with older Django versions with some settings
+The only requirement is Django 1.8+. App should work with older Django versions with some settings
 tweaks.
 
 Usage
