@@ -4,3 +4,4 @@
 .idea
 *egg*
 .DS_Store
+dist
