@@ -13,11 +13,17 @@ Feature highlights:
 * Set different domain for sitemap file
 * Ping google that sitemap has changed
 
+Python 2 users
+------
+
+Python 2 users have should use `4.4.0`. Newer versions will by Python 3 compatible only. Sorry about that.
+
 Requirements
 ------------
 
 The only requirement is Django 1.8+. App should work with older Django versions with some settings
 tweaks.
+
 
 Usage
 ------
@@ -47,7 +53,7 @@ Include ``static_sitemaps.urls`` to your ``urls.py`` to serve the root
 usefull sometimes when it's hard for you to serve it by webserver itself)::
 
 	urlpatterns = [
-		path(r'', include('static_sitemaps.urls')),
+		path('', include('static_sitemaps.urls')),
 	]
 
 Setup your cron to run::
