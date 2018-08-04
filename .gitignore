@@ -5,6 +5,7 @@
 *egg*
 .DS_Store
 dist
+django_static_sitemaps.egg-info
 .vscode
 __pycache__
 testapp/db.sqlite3
