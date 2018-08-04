@@ -9,20 +9,23 @@ import gzip
 import hashlib
 import os
 import subprocess
+from six import BytesIO
 
 from django.contrib.sitemaps import ping_google
 from django.core.exceptions import ImproperlyConfigured
 from django.core.files.base import ContentFile
 from django.core.files.storage import FileSystemStorage
 from django.core.paginator import EmptyPage, PageNotAnInteger
+
 try:
-    from django.core.urlresolvers import reverse, NoReverseMatch
-except ImportError:  # Django >= 2.0
     from django.urls import reverse, NoReverseMatch
+except ImportError:  # Django < 2.0
+    from django.core.urlresolvers import reverse, NoReverseMatch
+
 from django.template import loader
 from django.utils import translation
 from django.utils.encoding import smart_str
-from six import BytesIO
+
 from static_sitemaps import conf
 from static_sitemaps.util import _lazy_load
 
