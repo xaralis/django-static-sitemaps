@@ -5,3 +5,6 @@
 *egg*
 .DS_Store
 dist
+.vscode
+__pycache__
+testapp/db.sqlite3

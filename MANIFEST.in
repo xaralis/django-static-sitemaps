@@ -1,5 +1,6 @@
 include README.rst
 include MANIFEST.in
 recursive-include templates *
+prune testapp
 global-exclude __pycache__
 global-exclude *.pyc
