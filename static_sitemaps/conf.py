@@ -71,8 +71,12 @@ def get_url():
     elif settings.STATIC_URL.startswith('/'):
         # If STATIC_URL starts with '/', it is probably a relative URL to the
         # current domain so we append STATIC_URL.
-        from django.contrib.sites.models import Site
-        _url = Site.objects.get_current().domain + settings.STATIC_URL
+        if MOCK_SITE:
+            site = MOCK_SITE_PROTOCOL + '://' + MOCK_SITE_NAME
+        else:
+            from django.contrib.sites.models import Site
+            site = Site.objects.get_current().domain
+        _url = site + settings.STATIC_URL
     else:
         # If STATIC_URL starts with protocol, it is probably a special domain
         # for static files and we stick to it.
