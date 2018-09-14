@@ -56,7 +56,7 @@ MOCK_SITE_NAME = getattr(settings, 'STATICSITEMAPS_MOCK_SITE_NAME', None)
 MOCK_SITE_PROTOCOL = getattr(settings, 'STATICSITEMAPS_MOCK_SITE_PROTOCOL', 'http')
 
 
-def get_url():
+def get_url(site):
     _url = getattr(settings, 'STATICSITEMAPS_URL', None)
     if _url is not None:
         return _url
@@ -71,12 +71,7 @@ def get_url():
     elif settings.STATIC_URL.startswith('/'):
         # If STATIC_URL starts with '/', it is probably a relative URL to the
         # current domain so we append STATIC_URL.
-        if MOCK_SITE:
-            site = MOCK_SITE_PROTOCOL + '://' + MOCK_SITE_NAME
-        else:
-            from django.contrib.sites.models import Site
-            site = Site.objects.get_current().domain
-        _url = site + settings.STATIC_URL
+        _url = site.domain + settings.STATIC_URL
     else:
         # If STATIC_URL starts with protocol, it is probably a special domain
         # for static files and we stick to it.

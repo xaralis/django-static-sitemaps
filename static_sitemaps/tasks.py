@@ -3,7 +3,7 @@ from datetime import timedelta
 from celery.task import PeriodicTask
 
 from static_sitemaps import conf
-from static_sitemaps.generator import SitemapGenerator
+from static_sitemaps.generator import generate_sitemap
 
 __author__ = 'xaralis'
 
@@ -14,6 +14,4 @@ if conf.CELERY_TASK_REPETITION:
         run_every = timedelta(minutes=conf.CELERY_TASK_REPETITION)
     
         def run(self, **kwargs):
-            generator = SitemapGenerator(verbosity=1)
-            generator.write()
-
+            generate_sitemap(verbosity=1)
