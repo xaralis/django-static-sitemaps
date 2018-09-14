@@ -71,7 +71,7 @@ def get_url(site):
     elif settings.STATIC_URL.startswith('/'):
         # If STATIC_URL starts with '/', it is probably a relative URL to the
         # current domain so we append STATIC_URL.
-        _url = site.domain + settings.STATIC_URL
+        _url = site.domain + settings.STATIC_URL + site.domain + '/'
     else:
         # If STATIC_URL starts with protocol, it is probably a special domain
         # for static files and we stick to it.
