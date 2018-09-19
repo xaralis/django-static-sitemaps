@@ -1,5 +1,10 @@
 from django.conf import settings
 
+try:
+    from celery.schedules import crontab
+except ImportError:
+    crontab = None
+
 
 # Base sitemap config dict as stated in Django docs.
 ROOT_SITEMAP = settings.STATICSITEMAPS_ROOT_SITEMAP
@@ -39,6 +44,10 @@ STORAGE_CLASS = getattr(settings, 'STATICSITEMAPS_STORAGE', 'django.core.files.s
 
 # How often should the celery task be run.
 CELERY_TASK_REPETITION = getattr(settings, 'STATICSITEMAPS_REFRESH_AFTER', 60)
+
+# When should the celery task be run.
+CELERY_TASK_SCHEDULE = getattr(
+    settings, 'STATICSITEMAPS_REFRESH_ON', crontab(hour=0, minute=0) if crontab else None)
 
 # URL to serve sitemaps from.
 _url = getattr(settings, 'STATICSITEMAPS_URL', None)
