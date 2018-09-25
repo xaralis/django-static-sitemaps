@@ -42,12 +42,9 @@ INDEX_TEMPLATE = getattr(settings, 'STATICSITEMAPS_INDEX_TEMPLATE',
 # Storage class to use.
 STORAGE_CLASS = getattr(settings, 'STATICSITEMAPS_STORAGE', 'django.core.files.storage.FileSystemStorage')
 
-# How often should the celery task be run.
-CELERY_TASK_REPETITION = getattr(settings, 'STATICSITEMAPS_REFRESH_AFTER', 60)
-
 # When should the celery task be run.
 CELERY_TASK_SCHEDULE = getattr(
-    settings, 'STATICSITEMAPS_REFRESH_ON', crontab(hour=0, minute=0) if crontab else None)
+    settings, 'STATICSITEMAPS_REFRESH_ON', crontab(minute=0) if crontab else None)
 
 # URL to serve sitemaps from.
 _url = getattr(settings, 'STATICSITEMAPS_URL', None)
