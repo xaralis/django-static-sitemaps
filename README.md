@@ -55,6 +55,7 @@ usefull sometimes when it's hard for you to serve it by webserver itself)::
 	urlpatterns = [
 		path('', include('static_sitemaps.urls')),
 	]
+Make sure `STATIC_ROOT` to configure
 
 Setup your cron to run::
 
