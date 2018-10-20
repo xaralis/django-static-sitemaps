@@ -48,6 +48,9 @@ to dictionary holding the sitemaps configuration (as seen in Django docs)::
 
 	STATICSITEMAPS_ROOT_SITEMAP = 'myproject.sitemaps.sitemaps'
 
+Also, make sure you have `STATICSITEMAPS_ROOT_DIR` or at least `STATIC_ROOT` configured.
+Sitemap files will be placed there.
+
 Include ``static_sitemaps.urls`` to your ``urls.py`` to serve the root
 ``sitemap.xml`` if you want to serve index file through Django (might be
 usefull sometimes when it's hard for you to serve it by webserver itself)::
@@ -55,7 +58,6 @@ usefull sometimes when it's hard for you to serve it by webserver itself)::
 	urlpatterns = [
 		path('', include('static_sitemaps.urls')),
 	]
-Make sure `STATIC_ROOT` to configure
 
 Setup your cron to run::
 
