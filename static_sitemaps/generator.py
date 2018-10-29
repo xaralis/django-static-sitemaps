@@ -27,7 +27,7 @@ from django.utils import translation
 from django.utils.encoding import smart_str
 
 from static_sitemaps import conf
-from static_sitemaps.util import _lazy_load
+from static_sitemaps.util import _lazy_load, get_storage
 
 __author__ = 'xaralis'
 
@@ -38,11 +38,7 @@ class SitemapGenerator(object):
         self.protocol = conf.MOCK_SITE_PROTOCOL if conf.MOCK_SITE else conf.FORCE_PROTOCOL
         self.verbosity = verbosity
         self.has_changes = False
-        try:
-            self.storage = _lazy_load(conf.STORAGE_CLASS)(
-                location=os.path.join(conf.ROOT_DIR, self.site.domain))
-        except TypeError:
-            self.storage = _lazy_load(conf.STORAGE_CLASS)()
+        self.storage = get_storage(self.site)
 
         self.sitemaps = _lazy_load(conf.ROOT_SITEMAP)
 

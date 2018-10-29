@@ -5,7 +5,7 @@ from django.views.generic import View
 from django.contrib.sites.requests import RequestSite
 
 from static_sitemaps import conf
-from static_sitemaps.util import _lazy_load
+from static_sitemaps.util import get_storage
 
 
 class SitemapView(View):
@@ -14,10 +14,7 @@ class SitemapView(View):
 
         site = RequestSite(request)
 
-        try:
-            storage = _lazy_load(conf.STORAGE_CLASS)(location=os.path.join(conf.ROOT_DIR, site.domain))
-        except TypeError:
-            storage = _lazy_load(conf.STORAGE_CLASS)()
+        storage = get_storage(site)
 
         path = os.path.join(conf.ROOT_DIR, site.domain, '{}.xml'.format(section))
         if not storage.exists(path):

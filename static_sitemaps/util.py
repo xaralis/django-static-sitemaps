@@ -1,6 +1,9 @@
+import os
 from importlib import import_module
 
 from django.core.exceptions import ImproperlyConfigured
+
+from .conf import STORAGE_CLASS, ROOT_DIR
 
 
 def _lazy_load(class_path):
@@ -16,3 +19,14 @@ def _lazy_load(class_path):
     except AttributeError:
         raise ImproperlyConfigured('Module "%s" does not define a "%s" '
                                    'class.' % (module, attr))
+
+
+def get_storage(site):
+    storage = _lazy_load(STORAGE_CLASS)()
+    if STORAGE_CLASS == 'django.core.files.storage.FileSystemStorage':
+        try:
+            storage = _lazy_load(STORAGE_CLASS)(
+                location=os.path.join(ROOT_DIR, site.domain))
+        except TypeError:
+            storage = _lazy_load(STORAGE_CLASS)()
+    return storage
