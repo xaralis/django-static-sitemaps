@@ -65,7 +65,7 @@ MOCK_SITE_PROTOCOL = getattr(settings, 'STATICSITEMAPS_MOCK_SITE_PROTOCOL', 'htt
 def get_url(site):
     _url = getattr(settings, 'STATICSITEMAPS_URL', None)
     if _url is not None:
-        return _url
+        return _url + site.domain + '/'
 
     if DOMAIN:
         # Backwards compatibility.
