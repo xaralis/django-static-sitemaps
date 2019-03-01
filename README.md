@@ -35,13 +35,20 @@ Install via standard Python way::
 Add `static_sitemaps` to you ``INSTALLED_APPS`` and make sure
 `django.contrib.sitemaps` is present too:
 
+```python
 	INSTALLED_APPS = (
 		...
+		'django.contrib.sites',
 		'django.contrib.sitemaps',
 		...
 		'static_sitemaps',
 		...
 	)
+
+	SITE_ID = 1
+	```
+
+Remember to run `python manage.py makemigrations` and `python manage.py migrate`.
 
 Set ``STATICSITEMAPS_ROOT_SITEMAP`` variable in your ``settings.py`` to point
 to dictionary holding the sitemaps configuration (as seen in Django docs)::
@@ -64,6 +71,10 @@ Setup your cron to run::
 	django-admin.py refresh_sitemap
 
 periodically. Usually, it's enough to set it to run once by 30 minutes or so.
+
+For Windows users you can alternatively use the following command:
+
+	python manage.py runserver
 
 Done.
 
