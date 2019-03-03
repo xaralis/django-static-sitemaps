@@ -37,12 +37,12 @@ Add `static_sitemaps` to you ``INSTALLED_APPS`` and make sure
 
 ```python
 INSTALLED_APPS = (
-	...
-	'django.contrib.sites',
-	'django.contrib.sitemaps',
-	...
-	'static_sitemaps',
-	...
+    ...
+    'django.contrib.sites',
+    'django.contrib.sitemaps',
+    ...
+    'static_sitemaps',
+    ...
 )
 
 SITE_ID = 1
@@ -63,7 +63,7 @@ Include ``static_sitemaps.urls`` to your ``urls.py`` to serve the root
 usefull sometimes when it's hard for you to serve it by webserver itself):
 
 	urlpatterns = [
-		path('', include('static_sitemaps.urls')),
+	    path('', include('static_sitemaps.urls')),
 	]
 
 Setup your cron to run::
