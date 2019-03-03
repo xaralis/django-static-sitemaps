@@ -46,7 +46,7 @@ Add `static_sitemaps` to you ``INSTALLED_APPS`` and make sure
 	)
 
 	SITE_ID = 1
-	```
+```
 
 Remember to run `python manage.py makemigrations` and `python manage.py migrate`.
 
@@ -60,7 +60,7 @@ Sitemap files will be placed there.
 
 Include ``static_sitemaps.urls`` to your ``urls.py`` to serve the root
 ``sitemap.xml`` if you want to serve index file through Django (might be
-usefull sometimes when it's hard for you to serve it by webserver itself)::
+usefull sometimes when it's hard for you to serve it by webserver itself):
 
 	urlpatterns = [
 		path('', include('static_sitemaps.urls')),
