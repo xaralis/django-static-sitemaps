@@ -36,16 +36,16 @@ Add `static_sitemaps` to you ``INSTALLED_APPS`` and make sure
 `django.contrib.sitemaps` is present too:
 
 ```python
-	INSTALLED_APPS = (
-		...
-		'django.contrib.sites',
-		'django.contrib.sitemaps',
-		...
-		'static_sitemaps',
-		...
-	)
+INSTALLED_APPS = (
+	...
+	'django.contrib.sites',
+	'django.contrib.sitemaps',
+	...
+	'static_sitemaps',
+	...
+)
 
-	SITE_ID = 1
+SITE_ID = 1
 ```
 
 Remember to run `python manage.py makemigrations` and `python manage.py migrate`.
