@@ -153,9 +153,7 @@ Using a custom template
 
 If you need to use a template different from the Django's default (for example
 to generate a Google News sitemap) you can extend the you Sitemap class and
-setting a ``sitemap_template`` attribute. For Example:
-
-.. sourcecode::
+setting a ``sitemap_template`` attribute. For example:
 
     from django.contrib.sitemaps import GenericSitemap
 
