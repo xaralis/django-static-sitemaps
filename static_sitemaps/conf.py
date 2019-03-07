@@ -1,5 +1,10 @@
 from django.conf import settings
 
+try:
+    from celery.schedules import crontab
+except ImportError:
+    crontab = None
+
 
 # Base sitemap config dict as stated in Django docs.
 ROOT_SITEMAP = settings.STATICSITEMAPS_ROOT_SITEMAP
@@ -37,8 +42,9 @@ INDEX_TEMPLATE = getattr(settings, 'STATICSITEMAPS_INDEX_TEMPLATE',
 # Storage class to use.
 STORAGE_CLASS = getattr(settings, 'STATICSITEMAPS_STORAGE', 'django.core.files.storage.FileSystemStorage')
 
-# How often should the celery task be run.
-CELERY_TASK_REPETITION = getattr(settings, 'STATICSITEMAPS_REFRESH_AFTER', 60)
+# When should the celery task be run.
+CELERY_TASK_SCHEDULE = getattr(
+    settings, 'STATICSITEMAPS_REFRESH_ON', crontab(minute=0) if crontab else None)
 
 # URL to serve sitemaps from.
 _url = getattr(settings, 'STATICSITEMAPS_URL', None)
@@ -56,10 +62,10 @@ MOCK_SITE_NAME = getattr(settings, 'STATICSITEMAPS_MOCK_SITE_NAME', None)
 MOCK_SITE_PROTOCOL = getattr(settings, 'STATICSITEMAPS_MOCK_SITE_PROTOCOL', 'http')
 
 
-def get_url():
+def get_url(site):
     _url = getattr(settings, 'STATICSITEMAPS_URL', None)
     if _url is not None:
-        return _url
+        return _url + site.domain + '/'
 
     if DOMAIN:
         # Backwards compatibility.
@@ -71,8 +77,7 @@ def get_url():
     elif settings.STATIC_URL.startswith('/'):
         # If STATIC_URL starts with '/', it is probably a relative URL to the
         # current domain so we append STATIC_URL.
-        from django.contrib.sites.models import Site
-        _url = Site.objects.get_current().domain + settings.STATIC_URL
+        _url = site.domain + settings.STATIC_URL + site.domain + '/'
     else:
         # If STATIC_URL starts with protocol, it is probably a special domain
         # for static files and we stick to it.

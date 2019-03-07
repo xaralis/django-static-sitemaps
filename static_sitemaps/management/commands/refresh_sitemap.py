@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from static_sitemaps.generator import SitemapGenerator
+from static_sitemaps.generator import generate_sitemap
 
 __author__ = 'xaralis'
 
@@ -9,5 +9,4 @@ class Command(BaseCommand):
     help = 'Generates sitemaps files to a predefined directory.'
 
     def handle(self, *args, **options):
-        generator = SitemapGenerator(int(options.get('verbosity', 0)))
-        generator.write()
+        generate_sitemap(verbosity=int(options.get('verbosity', 0)))
