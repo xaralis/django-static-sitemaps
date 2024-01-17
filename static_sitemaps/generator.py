@@ -11,7 +11,6 @@ import os
 import subprocess
 from six import BytesIO
 
-from django.contrib.sitemaps import ping_google
 from django.core.exceptions import ImproperlyConfigured
 from django.core.files.base import ContentFile
 from django.core.files.storage import FileSystemStorage
@@ -123,15 +122,6 @@ class SitemapGenerator(object):
         with self.storage.open(path) as sitemap_index:
             if self.get_hash(sitemap_index.read()) != old_index_md5:
                 self.has_changes = True
-
-        if conf.PING_GOOGLE and self.has_changes:
-            try:
-                sitemap_url = reverse('static_sitemaps_index')
-            except NoReverseMatch:
-                sitemap_url = "%ssitemap.xml" % baseurl
-
-            self.out('Pinging google...', 2)
-            ping_google(sitemap_url)
 
     def write_page(self, site, page, filename):
         self.out('Writing sitemap %s.' % filename, 2)

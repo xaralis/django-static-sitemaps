@@ -129,9 +129,6 @@ Advanced settings
 ``STATICSITEMAPS_LANGUAGE``
     Language code to use when generating the sitemaps. Defaults to ``LANGUAGE_CODE`` setting.
 
-``STATICSITEMAPS_PING_GOOGLE``
-    Boolean determining whether to ping google after sitemaps have been updated. Defaults to ``True``. Please note that google will only be notified if something changed in the sitemap file set.
-
 ``STATICSITEMAPS_REFRESH_AFTER``
     How often (in minutes) should the celery task be run. Defaults to 60 minutes.
 

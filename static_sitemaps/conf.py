@@ -27,9 +27,6 @@ DOMAIN = getattr(settings, 'STATICSITEMAPS_DOMAIN', None)
 # Language of sitemaps.
 LANGUAGE = getattr(settings, 'STATICSITEMAPS_LANGUAGE', settings.LANGUAGE_CODE)
 
-# Ping google after something changed in sitemap?
-PING_GOOGLE = getattr(settings, 'STATICSITEMAPS_PING_GOOGLE', True)
-
 # Template for sitemap index.
 INDEX_TEMPLATE = getattr(settings, 'STATICSITEMAPS_INDEX_TEMPLATE',
                          'static_sitemaps/sitemap_index.xml')
