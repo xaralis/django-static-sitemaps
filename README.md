@@ -11,7 +11,6 @@ Feature highlights:
 * Split sitemap files when limit for size is reached
 * gzip the sitemap files when required
 * Set different domain for sitemap file
-* Ping google that sitemap has changed
 
 Python 2 users
 ------
