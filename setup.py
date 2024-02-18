@@ -9,7 +9,7 @@ setup(
         '',
     )),
     author='Filip Varecha',
-    author_email='xaralis@centrum.cz',
+    author_email='filip@varecha.work',
     license='BSD',
     url='http://github.com/xaralis/django-static-sitemaps',
 
