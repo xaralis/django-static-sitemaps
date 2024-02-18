@@ -11,7 +11,6 @@ import os
 import subprocess
 from six import BytesIO
 
-from django.contrib.sitemaps import ping_google
 from django.core.exceptions import ImproperlyConfigured
 from django.core.files.base import ContentFile
 from django.core.files.storage import FileSystemStorage
@@ -35,7 +34,6 @@ __author__ = 'xaralis'
 class SitemapGenerator(object):
     def __init__(self, verbosity):
         self.verbosity = verbosity
-        self.has_changes = False
         try:
             self.storage = _lazy_load(conf.STORAGE_CLASS)(location=conf.ROOT_DIR)
         except TypeError:
@@ -85,8 +83,6 @@ class SitemapGenerator(object):
         self.out('Finished generating sitemaps.', 1)
 
     def write_index(self):
-        old_index_md5 = None
-
         baseurl = self.normalize_url(conf.get_url())
         parts = []
 
@@ -114,24 +110,10 @@ class SitemapGenerator(object):
         self.out('Writing index file.', 2)
 
         if self.storage.exists(path):
-            old_index_md5 = self.read_hash(path)
             self.storage.delete(path)
 
         output = loader.render_to_string(conf.INDEX_TEMPLATE, {'sitemaps': parts})
         self._write(path, output)
-
-        with self.storage.open(path) as sitemap_index:
-            if self.get_hash(sitemap_index.read()) != old_index_md5:
-                self.has_changes = True
-
-        if conf.PING_GOOGLE and self.has_changes:
-            try:
-                sitemap_url = reverse('static_sitemaps_index')
-            except NoReverseMatch:
-                sitemap_url = "%ssitemap.xml" % baseurl
-
-            self.out('Pinging google...', 2)
-            ping_google(sitemap_url)
 
     def write_page(self, site, page, filename):
         self.out('Writing sitemap %s.' % filename, 2)
@@ -171,10 +153,6 @@ class SitemapGenerator(object):
 
         output = smart_str(loader.render_to_string(template, {'urlset': urls}))
         self._write(path, output)
-
-        with self.storage.open(path) as sitemap_page:
-            if old_page_md5 != self.get_hash(sitemap_page.read()):
-                self.has_changes = True
 
         if conf.USE_GZIP:
             if conf.GZIP_METHOD not in ['python', 'system', ]:
