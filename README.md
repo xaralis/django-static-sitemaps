@@ -131,6 +131,9 @@ Advanced settings
 ``STATICSITEMAPS_REFRESH_AFTER``
     How often (in minutes) should the celery task be run. Defaults to 60 minutes.
 
+``STATICSITEMAPS_FORCE_PROTOCOL``
+    Force the protocol to use with django sites framework. Not specified by default, leaving Django sites framework decide what protocol to use ([quote from django docs](https://docs.djangoproject.com/en/2.2/ref/contrib/sitemaps/#django.contrib.sitemaps.Sitemap.protocol): `If the sitemap is built outside the context of a request, the default is 'http'`)
+    
 ``STATICSITEMAPS_MOCK_SITE``
     True|False setting if you want to mock the Django sites framework. Useful if you want to use package without enabling django.contrib.sites. Defaults to False.
 
