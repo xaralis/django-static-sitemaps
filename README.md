@@ -20,8 +20,7 @@ Python 2 users have should use `4.4.0`. Newer versions will by Python 3 compati
 Requirements
 ------------
 
-The only requirement is Django 1.8+. App should work with older Django versions with some settings
-tweaks.
+The only requirement is Django 2.2+. Tested with Django 2.2, 3.2 and 4.2.
 
 
 Usage

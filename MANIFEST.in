@@ -1,5 +1,4 @@
-include README.rst
+include README.md
 include MANIFEST.in
 recursive-include static_sitemaps *
-global-exclude __pycache__
-global-exclude *.pyc
+global-exclude *.py[cod]

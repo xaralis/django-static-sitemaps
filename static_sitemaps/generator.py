@@ -9,17 +9,14 @@ import gzip
 import hashlib
 import os
 import subprocess
-from six import BytesIO
+from io import BytesIO
 
 from django.core.exceptions import ImproperlyConfigured
 from django.core.files.base import ContentFile
 from django.core.files.storage import FileSystemStorage
 from django.core.paginator import EmptyPage, PageNotAnInteger
 
-try:
-    from django.urls import reverse, NoReverseMatch
-except ImportError:  # Django < 2.0
-    from django.core.urlresolvers import reverse, NoReverseMatch
+from django.urls import reverse, NoReverseMatch
 
 from django.template import loader
 from django.utils import translation
@@ -36,8 +33,10 @@ class SitemapGenerator(object):
         self.verbosity = verbosity
         try:
             self.storage = _lazy_load(conf.STORAGE_CLASS)(location=conf.ROOT_DIR)
+            self.root_dir = ''
         except TypeError:
             self.storage = _lazy_load(conf.STORAGE_CLASS)()
+            self.root_dir = conf.ROOT_DIR
 
         self.sitemaps = _lazy_load(conf.ROOT_SITEMAP)
 
@@ -106,7 +105,7 @@ class SitemapGenerator(object):
                     'lastmod': lastmod
                 })
 
-        path = os.path.join(conf.ROOT_DIR, 'sitemap.xml')
+        path = os.path.join(self.root_dir, 'sitemap.xml')
         self.out('Writing index file.', 2)
 
         if self.storage.exists(path):
@@ -144,7 +143,7 @@ class SitemapGenerator(object):
 
         lastmods = [lastmod for lastmod in [u.get('lastmod') for u in urls] if lastmod is not None]
         file_lastmod = max(lastmods) if len(lastmods) > 0 else None
-        path = os.path.join(conf.ROOT_DIR, filename)
+        path = os.path.join(self.root_dir, filename)
         template = getattr(site, 'sitemap_template', 'sitemap.xml')
 
         if self.storage.exists(path):
@@ -166,7 +165,7 @@ class SitemapGenerator(object):
 
             if conf.GZIP_METHOD == 'system':
                 # GZIP with system gzip binary
-                subprocess.call([conf.SYSTEM_GZIP_PATH, '-f', path, ])
+                subprocess.call([conf.SYSTEM_GZIP_PATH, '-f', self.storage.path(path), ])
             else:
                 # GZIP with python gzip lib
                 try:

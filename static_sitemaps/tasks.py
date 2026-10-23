@@ -1,7 +1,11 @@
 from datetime import timedelta
 
-from celery import Task
-
+try:
+    from celery import Task
+except:
+    # fallback
+    Task = object
+    
 from static_sitemaps import conf
 from static_sitemaps.generator import SitemapGenerator
 

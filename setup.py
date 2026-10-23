@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import find_namespace_packages, setup
 import static_sitemaps
 
 setup(
@@ -13,17 +13,13 @@ setup(
     license='BSD',
     url='http://github.com/xaralis/django-static-sitemaps',
 
-    packages=(
-        'static_sitemaps',
-        'static_sitemaps.management',
-        'static_sitemaps.management.commands'),
+    packages=find_namespace_packages(include=['static_sitemaps', 'static_sitemaps.*']),
 
     include_package_data=True,
 
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
-        "License :: OSI Approved :: BSD License",
         "Framework :: Django",
         "Programming Language :: Python :: 2.5",
         "Programming Language :: Python :: 2.6",
@@ -36,8 +32,6 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     install_requires=[
-        'setuptools>=0.6b1',
-        'six>=1.11.0',
-        'Django>=1.8',
+        'Django>=2.2',
     ],
 )
